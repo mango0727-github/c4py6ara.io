@@ -20,7 +20,7 @@
 lang:                  en
 
 # The title of your blog. Used in the sidebar and the browser tab.
-title:                 Starter Kit
+title:                 Joon InfoSec Playground
 remote_theme: hydecorp/hydejack@v9.2.1
 
 # A short description (~150 chars) of the page used for the meta description tag.
