@@ -3,7 +3,6 @@ layout: post
 title: Useful Tools for Enum
 description: >
   Tools to enumerate directories and subdomains and to check if they are alive.
-image: /assets/img/blog/example-content-ii.jpg
 sitemap: false
 ---
 
