@@ -8,7 +8,7 @@ sitemap: false
 permalink: /docs/
 ---
 
-
+Here I introduce how modern cellular networks work. The cellular networks have evolved significantly over the last 20 years. During this time, various technologies have been invented, deployed, and deprecated. Also, in the past, there were multiple standards for cellular industry stakeholders to follow. However, many of them had been consolidated into a lot simpler and efficient standards. In this section, only 4G (LTE or Long Term Evolution) and 5G (NR or New Radio) are covered among the variety of standards.
 
 
 
