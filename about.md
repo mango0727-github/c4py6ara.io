@@ -10,18 +10,19 @@ redirect_from:
 
 # About
 
+Hi, my name is Joonyoung Jeong, but you can just call me Joon. I have been serving as a military officer since 2013. I am eager to study wireless security, especially cellular network security, because I believe wireless network security will be critical (it's already critical, it will become even more so in the future) as everything we carry is increasingly connected through wireless networks. With such growth in connectivity, there will inevitably be people trying to exploit vulnerabilities in wireless devices to infiltrate otherwise secure systems.
+
 ## Education
 
 ### Iowa State University (ISU)
-M.S. in Electrical and Computer Engineering
+M.S. in Electrical and Computer Engineering, Aug 2021 - Jul 2023
 ### Korea Military Academy (KMA)
-B.E. in Mechanical Engineering
+B.E. in Mechanical Engineering, Feb 2013 - Mar 2013
 
 ## Research Interest
-My current research interest lies in computer system security, especially:
-- Binary analysis and reverse engineering
-- Software testing and vulnerability discovery
-- Cellular network protocol security
+My current research interest lies in wireless system security, especially:
+- Cellular network security
+- Reverse engineering (malware analysis)
 
 During my M.S. program, my research focused on wireless communication (physical layer) security, leading to my thesis titled _"Covert Authentication for Securing MIMO Communications."_ Following graduation, I began my new career at a government agency that had fully sponsored my tuition fee and stipend. The security I dealt with was a little different from my research area in the M.S., and the work was both mentally and physically demanding. However, the security across different layers fascinated me so much that it motivated me to further delve into wireless security but at higher layers. 
 
