@@ -26,7 +26,7 @@ remote_theme: hydecorp/hydejack@v9.2.1
 # A short description (~150 chars) of the page used for the meta description tag.
 # Can use markdown, but no more than one paragraph (enforced by `>`)
 description:           >
-  Welcome to my place, where I put random things I am interested in. They are mainly about information security, wireless, and horse riding.
+  Welcome to my place, where I put random things I am interested in. They are mainly about information security, wireless, and horse riding. Also, I look forward to what I am gonna be into moving forward!
 
 # A shorter description for the sidebar.
 # tagline:               Change `tagline` in `_config.yml`
