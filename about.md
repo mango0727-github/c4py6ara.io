@@ -10,7 +10,9 @@ redirect_from:
 
 # About
 
-Hi, my name is Joonyoung Jeong, but you can just call me Joon. I have been serving as a military officer since 2013. I am eager to study wireless security, especially cellular network security, because I believe wireless network security will be critical (it's already critical, it will become even more so in the future) as everything we carry is increasingly connected through wireless networks. With such growth in connectivity, there will inevitably be people trying to exploit vulnerabilities in wireless devices to infiltrate otherwise secure systems.
+Hi, my name is Joonyoung Jeong, but you can just call me Joon. I have been serving as a military officer since 2013. 
+
+I am eager to study wireless security, especially cellular network security, because I believe wireless network security will be critical (it's already critical, it will become even more so in the future) as everything we carry is increasingly connected through wireless networks. With such growth in connectivity, there will inevitably be people trying to exploit vulnerabilities in wireless devices to infiltrate otherwise secure systems.
 
 ## Education
 
