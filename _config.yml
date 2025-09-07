@@ -93,7 +93,7 @@ paginate_path:         /:num/
  
 # Sidebar image and theme color of the site.
 accent_image:          assets/img/blog/bg2.JPG
-accent_color:          rgb(79,177,186)
+accent_color:          rgb(218,145,50)
 
 # This is used for the `theme-color` meta tag,
 # which changes the background color of the browser UI in certain browsers.
@@ -128,7 +128,7 @@ defaults:
   - scope:
       path:            hyde/
     values:
-      accent_color:    rgb(38,139,210)
+      accent_color:    rgb(255,214,97)
       theme_color:     rgb(32,32,32)
       accent_image:
         background:    rgb(32,32,32)
