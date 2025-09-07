@@ -17,9 +17,9 @@ I am eager to study wireless security, especially cellular network security, bec
 ## Education
 
 ### Iowa State University (ISU)
-M.S. in Electrical and Computer Engineering, Aug 2021 - Jul 2023
+M.S. in Electrical and Computer Engineering, _Aug 2021 - Jul 2023_
 ### Korea Military Academy (KMA)
-B.E. in Mechanical Engineering, Feb 2013 - Mar 2013
+B.E. in Mechanical Engineering, _Feb 2013 - Mar 2013_
 
 ## Research Interest
 My current research interest lies in wireless system security, especially:
