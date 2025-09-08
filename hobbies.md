@@ -1,5 +1,5 @@
 ---
-layout: blog
+layout: page
 title: Hobbies
 description: >
   This is the `list` layout for showing blog posts, which shows just the title and groups them by year of publication.
