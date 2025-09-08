@@ -55,8 +55,8 @@ menu:
     url:               /posts/
   - title:             Hobbies
     url:               /hobbies/
-  - title:             Documentation
-    url:               /docs/
+  # - title:             Documentation
+  #   url:               /docs/
 
 
 # Add links to the footer.
