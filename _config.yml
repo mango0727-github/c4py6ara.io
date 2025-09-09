@@ -96,7 +96,7 @@ apple_touch_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAA
 # ----------------------------------------------------------------------------------------
  
 # Sidebar image and theme color of the site.
-accent_image:          assets/img/blog/bg4.JPG
+accent_image:          assets/img/blog/bg4.jpg
 accent_color:          rgb(139,69,19)
 
 # This is used for the `theme-color` meta tag,
