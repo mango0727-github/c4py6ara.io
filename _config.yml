@@ -79,8 +79,8 @@ permalink:             /:categories/:year-:month-:day-:title/
 paginate:              10
 paginate_path:         /:num/
 
-favicon:
-apple_touch_icon: 
+favicon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>"
+apple_touch_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottQAAAABJRU5ErkJggg=="
 # Theme
 # ---------------------------------------------------------------------------------------
 
