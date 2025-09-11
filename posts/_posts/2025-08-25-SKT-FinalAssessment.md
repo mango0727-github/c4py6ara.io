@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Malware Analysis Report
+title: Malware Analysis Report: SKT incident
 description: >
   Redline
 sitemap: false
@@ -49,9 +49,4 @@ More importantly, the committee was unable to reconstruct the detailed initial a
 Data collected in the HSS was exfiltrated through another infected server within the maintenance server network.  
 During the multiple investigation, several malware samples were discovered, leading to the conclusion that these samples, including BPFDoor, were designed with a focus on persistence rather than self-deletion or covering their tracks.
 
-# What's BPFDoor
-> Detailed procedure is introduced in [here](https://www.msit.go.kr/bbs/view.do?sCode=user&mId=307&mPid=208&pageIndex=1&bbsSeqNo=94&nttSeqNo=3185964&searchOpt=ALL&searchTxt) and the architecture of EPC is explained in [this post](https://mango0727-github.github.io/josephjy.io/2025-08-23-SKTIncidentInitAssessmnt/), so we will focus on what's BPFDoor is.
-
-BPF(Berkeley Packet Filter)Door is a type of backdoor especially designed for Linux, which is an obvious choice for the attacker, since most core network nodes today run on Linux.
-
-...Working on it....
+Unfortunately, it's been too long since the initial infiltration occurred, thus there is not much information or many records for the investigation committee to look into. I'm very sorry that most of the talks on the incident are mainly about how SKT is going to compensate for the data loss, not about how it happened and what to patch up. What's worse is that people have almost forgotten about the incident already.
