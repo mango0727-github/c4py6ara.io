@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Malware Analysis Report: SKT incident
+title: Thoughts on SKT incident Final Report 
 description: >
-  Redline
+  This is my thought on SKT incident final report 
 sitemap: false
 hide_last_modified: true
 ---
