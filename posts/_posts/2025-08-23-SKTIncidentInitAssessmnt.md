@@ -53,7 +53,7 @@ When you use a smartphone (User Equipment, UE) to access the internet (excluding
 ## HSS with MME
 The HSS stores essential subscriber data, including:
 | Data Category       | Examples                                       |
-|---------------------|------------------------------------------------|
+| --- | --- |
 | Subscriber Identity | IMSI, MSISDN (phone number)                    |
 | Authentication Data | Ki, RAND, XRES, AUTN, KASME                     |
 | Service Information | APN list, QoS profile, charging policy          |
@@ -72,7 +72,7 @@ Thus, the HSS is the repository of all essential subscriber information, with Ki
 According to the April 29 Ministry of Science and ICT press release, the preliminary investigation found that 25 types of data were leaked, including four critical items needed to clone a USIM (phone number, IMSI, Ki, ICCID). However, IMEI data was not leaked.
 The difference between IMSI and IMEI:
 | Type       | Explaination                                       |
-|---------------------|------------------------------------------------|
+| --- | --- |
 |IMSI |	Used by the carrier (SKT) to identify the subscriber (e.g., Joon) |
 | IMEI	| Used by the carrier to identify the device (e.g., Joon’s iPhone 15 Pro) |
 
@@ -94,7 +94,7 @@ Since this topic overlaps with my graduate research interests, I wrote this blog
 
 ### UE Identity
 | Types | Definition | Stored in | Stored (managed) by | Format |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **IMSI** | Globally unique permanent subscriber identity (in 5G, often the SUPI of type IMSI) | USIM (EF-IMSI) | UDM/UDR (authoritative subscription data).<br>USIM is provisioned by the operator, not "written by UDM". | MCC (3) + MNC (2–3) + MSIN (≤10) |
 | **IMEI** | Permanent device identity | UE hardware (non-volatile) | 5G-EIR (equipment lists/status checks) | TAC (8) + SNR (6) + Check digit (1) |
 | **SUPI / SUCI** | SUPI: permanent subscriber ID.<br>SUCI: radio-transmitted, concealed form of SUPI for privacy | SUPI: UDM/UDR.<br>SUCI: generated on the UE using the HN public key | SUPI: UDM/UDR.<br>SUCI de-conceal: SIDF (within UDM) | SUPI types: IMSI or NAI.<br>SUCI fields: SUPI type, HN ID, Routing Indicator, Protection Scheme ID, HN Public Key ID, Scheme Output |
