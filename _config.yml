@@ -55,8 +55,8 @@ menu:
     url:               /posts/
   - title:             Hobbies
     url:               /hobbies/
-  - title:             Cellular Comms
-    url:               /learning/
+  # - title:             Cellular Comms
+  #   url:               /learning/
   # - title:             Documentation
   #   url:               /docs/
 
