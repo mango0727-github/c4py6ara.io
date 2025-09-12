@@ -1,4 +1,4 @@
-<img width="1167" height="158" alt="{27ECFED3-4E67-410A-9739-FB12CBDF3B45}" src="https://github.com/user-attachments/assets/367fde5d-b938-459e-bd59-70cc3f31cb3d" />---
+---
 layout: post
 title: SKT incident overview (from my prev. blog)
 description: >
