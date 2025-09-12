@@ -52,6 +52,7 @@ When you use a smartphone (User Equipment, UE) to access the internet (excluding
 
 ## HSS with MME
 The HSS stores essential subscriber data, including:
+
 | Data Category | Examples |
 | --- | --- |
 | Subscriber Identity | IMSI, MSISDN (phone number)                    |
@@ -71,6 +72,7 @@ Thus, the HSS is the repository of all essential subscriber information, with Ki
 ## What Does This Mean?
 According to the April 29 Ministry of Science and ICT press release, the preliminary investigation found that 25 types of data were leaked, including four critical items needed to clone a USIM (phone number, IMSI, Ki, ICCID). However, IMEI data was not leaked.
 The difference between IMSI and IMEI:
+
 | Type       | Explaination                                       |
 | --- | --- |
 |IMSI |	Used by the carrier (SKT) to identify the subscriber (e.g., Joon) |
@@ -93,6 +95,7 @@ Since this topic overlaps with my graduate research interests, I wrote this blog
 > For avid people learning cellular networks, this book was really helpful for me to understand how our modern cellular networks work. Thanks to my advisor Sang Kim for recommending this book for my research.
 
 ### UE Identity
+
 | Types | Definition | Stored in | Stored (managed) by | Format |
 | --- | --- | --- | --- | --- |
 | **IMSI** | Globally unique permanent subscriber identity (in 5G, often the SUPI of type IMSI) | USIM (EF-IMSI) | UDM/UDR (authoritative subscription data).<br>USIM is provisioned by the operator, not "written by UDM". | MCC (3) + MNC (2–3) + MSIN (≤10) |
