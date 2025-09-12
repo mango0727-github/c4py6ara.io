@@ -52,7 +52,7 @@ When you use a smartphone (User Equipment, UE) to access the internet (excluding
 
 ## HSS with MME
 The HSS stores essential subscriber data, including:
-| Data Category       | Examples                                       |
+| Data Category | Examples |
 | --- | --- |
 | Subscriber Identity | IMSI, MSISDN (phone number)                    |
 | Authentication Data | Ki, RAND, XRES, AUTN, KASME                     |
