@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Ride
+title: Understanding horses
 sitemap: false
 categories: [hobbies]
 hide_last_modified: true
