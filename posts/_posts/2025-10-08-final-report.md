@@ -147,11 +147,8 @@ $$
 
 
 
-where ci,j
-, bi,j
-, and ni,j are categorical, binary, and numerical data, respectively, for i =
-1,...,8. C,B, and D are the total number of categorical, binary, and numerical features,
-respectively.
+where $$c_{i,j}, d_{i,j}$$, and $$n_{i,j}$$ are categorical, binary, and numerical data, respectively, for i =
+1,...,8. $$C, B,$$ and $$D$$ are the total number of categorical, binary, and numerical features, respectively.
 
 When computing the loss of the SDAE, different loss functions are employed depending on
 the data type as we cannot use mean-square error for the entire dataset. For binary data,
