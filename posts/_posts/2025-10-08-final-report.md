@@ -48,7 +48,7 @@ gaining access to their machine or network resources. The attacks in each catego
 observed in Table 1.
 | DoS | Probe | R2L | U2R |
 |-----|-------|-----|-----|
-| neptune<br>smurf<br>back<br>teardrop<br>pod<br>land | satan<br>ipsweep<br>portsweep<br>nmap | warezclient<br>guess_passwd<br>warezmaster<br>imap<br>ftp_write<br>multihop<br>phf<br>spy | buffer_overflow<br>rootkit<br>loadmodule<br>perl |
+| neptune<br/>smurf<br/>back<br/>teardrop<br/>pod<br/>land | satan<br/>ipsweep<br/>portsweep<br/>nmap | warezclient<br/>guess_passwd<br/>warezmaster<br/>imap<br/>ftp_write<br/>multihop<br/>phf<br/>spy | buffer_overflow<br/>rootkit<br/>loadmodule<br/>perl |
 
 **Table 1:** Categories of attack types in the NSL-KDD dataset.
 
@@ -93,18 +93,7 @@ $$
   \mathbb{D} = [\mathbb{c}_1 \cdots \mathbb{c}_C \mathbb{n}_1 \cdots \mathbb{c}_D \mathbb{b}_1 \cdots \mathbb{b}_B] 
 \end{aligned}
 $$
-
-
-D =
-h
-c1 ... cC n1 ... nD b1 ...bB
-i
-
-where ci
-, nj and bk are categorical, numerical and binary data columns respectively. This
-allows us to keep track of the various features’ data type and use the appropriate loss function
-during training. Then, the numerical data is normalized and the categorical data is one-hot
-encoded. This gives a total of 122 features after data preprocessing.
+where $$\mathbb{c}_i$$, $$\mathbb{n}_j$$ and $$\mathbb{b}_k$$ are categorical, numerical and binary data columns, respectively. This allows us to keep track of the various features’ data type and use the appropriate loss function during training. Then, the numerical data is normalized and the categorical data is one-hot encoded. This gives a total of 122 features after data preprocessing.
 
 ### Stacked Denoising Autoencoder
 The SDAE was first introduced in [6] as a form of unsupervised learning. The authors high-
@@ -125,6 +114,36 @@ in our dataset. Hence, batch swap noise is the best choice as it can be used for
 type. Not only that, but it is also computationally cheap since it is just swapping data and
 serves the purpose of introducing noise into the dataset. As an example, our swap noise can
 be represented as,
+
+$$
+\mathbb{D} =
+\left[
+\begin{array}{cccccccccc}
+c_{1,1} & \ldots & c_{1,C} & b_{1,1} & \ldots & b_{1,B} & n_{1,1} & \ldots & n_{1,D} \\
+c_{2,1} & \ldots & c_{2,C} & b_{2,1} & \ldots & b_{2,B} & n_{2,1} & \ldots & n_{2,D} \\
+c_{3,1} & \ldots & c_{3,C} & b_{3,1} & \ldots & b_{3,B} & n_{3,1} & \ldots & n_{3,D} \\
+c_{4,1} & \ldots & c_{4,C} & b_{4,1} & \ldots & b_{4,B} & n_{4,1} & \ldots & n_{4,D} \\
+c_{5,1} & \ldots & c_{5,C} & b_{5,1} & \ldots & b_{5,B} & n_{5,1} & \ldots & n_{5,D} \\
+c_{6,1} & \ldots & c_{6,C} & b_{6,1} & \ldots & b_{6,B} & n_{6,1} & \ldots & n_{6,D} \\
+c_{7,1} & \ldots & c_{7,C} & b_{7,1} & \ldots & b_{7,B} & n_{7,1} & \ldots & n_{7,D} \\
+c_{8,1} & \ldots & c_{8,C} & b_{8,1} & \ldots & b_{8,B} & n_{8,1} & \ldots & n_{8,D}
+\end{array}
+\right]
+\;\;\;\Longrightarrow\;\;\;
+\left[
+\begin{array}{cccccccccc}
+c_{7,1} & \ldots & c_{2,C} & b_{1,1} & \ldots & b_{3,B} & n_{3,1} & \ldots & n_{1,D} \\
+c_{5,1} & \ldots & c_{1,C} & b_{7,1} & \ldots & b_{1,B} & n_{7,1} & \ldots & n_{5,D} \\
+c_{3,1} & \ldots & c_{5,C} & b_{3,1} & \ldots & b_{8,B} & n_{3,1} & \ldots & n_{9,D} \\
+c_{2,1} & \ldots & c_{3,C} & b_{5,1} & \ldots & b_{5,B} & n_{5,1} & \ldots & n_{2,D} \\
+c_{6,1} & \ldots & c_{5,C} & b_{5,1} & \ldots & b_{5,B} & n_{5,1} & \ldots & n_{6,D} \\
+c_{1,1} & \ldots & c_{7,C} & b_{5,1} & \ldots & b_{5,B} & n_{5,1} & \ldots & n_{7,D} \\
+c_{1,1} & \ldots & c_{4,C} & b_{5,1} & \ldots & b_{1,B} & n_{5,1} & \ldots & n_{7,D} \\
+c_{8,1} & \ldots & c_{1,C} & b_{1,1} & \ldots & b_{8,B} & n_{1,1} & \ldots & n_{2,D}
+\end{array}
+\right]
+$$
+
 
 where ci,j
 , bi,j
