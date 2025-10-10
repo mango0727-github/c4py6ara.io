@@ -136,7 +136,7 @@ After training the SDAE, the hidden representations from the autoencoder is obta
 
 $$
 \begin{aligned}
-  f(x) = \max{0,x}
+  f(x) = \max(0,x)
 \end{aligned}
 $$
 
