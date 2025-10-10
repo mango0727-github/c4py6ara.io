@@ -47,6 +47,7 @@ preprocessed before being utilized. These steps will be discussed in the followi
 ## Proposed system
 For this project, we propose a scheme for detecting and classifying different types of intrusion in a network by combining the fully-connected deep neural network and the SDAE as illustrated in Figure 1. First, after splitting the dataset into training and testing sets, we will preprocess the entire dataset to be suitable to be used as inputs to our neural networks. Next, we will stack both the preprocessed training and testing data into a single matrix and feed it into the SDAE in order to train the SDAE to learn a lower dimensional representation of the input data. Because the SDAE is an unsupervised learning algorithm, we can leverage from both the training and testing set to train it. Then, we will encode only the training data using the trained SDAE to train the classifier since the neural network is a supervised algorithm. Lastly, we will then autoencode the testing data to be classified and to evaluate the performance of the classifier and the entire system as a whole.
 
+![Figure 1. The diagram for the proposed model.]({{ '/assets/img/EE529final/figure1.png' | relative_url}}){: .mx-auto.d-block :}
 
 ### Data preprocessing
 The first preprocessing step is to first arrange the data based on their data types,
@@ -61,6 +62,8 @@ where $$\mathbb{c}_i$$, $$\mathbb{n}_j$$ and $$\mathbb{b}_k$$ are categorical, n
 
 ### Stacked Denoising Autoencoder
 The SDAE was first introduced in [6] as a form of unsupervised learning. The authors highlight the SDAE is a straightforward variation of autoencoders by simply stacking multiply layers of encoding and multiple layers of decoding. The encoding function transforms the input data into a lower dimensional representation and then the decoding function attempts to reconstruct the original input data from the hidden representations. Our encoder has 3 hidden layers with 128, 64 and 32 neurons respectively and its training process can be observed in Figure 2.
+
+![Figure 2. The stacked Denoising Autoencoder architecture.]({{ '/assets/img/EE529final/figure2.png' | relative_url}}){: .mx-auto.d-block :}
 
 During training, noise is added into the input data to prevent the autoencoder from learning the identity function which makes the hidden representations redundant. There are many ways to introduce noise into a dataset, but for our work we decided on utilizing batch swap noise for applying noise to our tabular dataset [7]. This noise generator method randomly swaps a data point with another data point in the same column in a data matrix. This is because we cannot add noise from a Gaussian distribution to the categorical or binary data in our dataset. Hence, batch swap noise is the best choice as it can be used for every data type. Not only that, but it is also computationally cheap since it is just swapping data and
 serves the purpose of introducing noise into the dataset. As an example, our swap noise can be represented as,
@@ -152,18 +155,22 @@ $$
 
 The deep stack technique is also utilized where the output of each layer in the autoencoder is used and stacked into a single vector and then fed into the classifier. This is to take advantage of the autoencoder and leverage all of the learnt information from the encoding process. Because the autoencoder has 3 layers of encoding with output vectors of lengths 128, 64 and 32, the new vector’s length is therefore 224 elements long. There are quite a few hyperparameters in the classifier that can be tuned in the system that are the number of layers, the dropout percentage and number of neurons in each layer. The architecture of the neural network is illustrated in Figure 3.
 
+![Figure 3. Neural network classifier architecture.]({{ '/assets/img/EE529final/figure3.png' | relative_url}}){: .mx-auto.d-block :}
 
 ## Results
 
 The proposed system with the SDAE and neural network classifier is evaluated on a laptop with an AMD Ryzen 5 3500U CPU and 8GB of RAM. The training of the autoencoder and
 the classifier can be observed in the figure below. It can be seen that due to the lack of a GPU, the training time is rather long especially for the SDAE that takes more than 1 hour to train. However, with a setup possessing a GPU dedicated to training neural networks, the training time can be significantly shorter as both the autoencoder and classifiers are neural networks. This allows them to take advantage of the parallel computation that a GPU provides which will reduce the training time to more reasonable numbers.
 
+![Figure 4. Training of the SDAE and classifier.]({{ '/assets/img/EE529final/figure4.png' | relative_url}}){: .mx-auto.d-block :}
 
 A baseline model is also created that consists of just the neural network classifier with the same parameters to test the efficacy of the SDAE. After training both models, both are evaluated with the same number of test data points and the confusion matrix for both can be seen models can be seen below. Without the SDAE, the accuracy of the classifier is only around 92.46%. However, when the SDAE is utilized, we are able to obtain accuracies of around 99%. This shows that the encoding function allows for better feature extraction for higher precision in the classification task.
 
+![Figure 5. Confusion matrix with and without SDAE.]({{ '/assets/img/EE529final/figure5.png' | relative_url}}){: .mx-auto.d-block :}
 
 Another comparison is also made between the deep stack and the deep bottleneck technique. The deep bottleneck technique only uses the output of the last encoding layer unlike the deep stack technique which uses every output layer. The same neural network is used again and the confusion matrix for the deep bottleneck technique is shown below. It can be seen that it also performs very well with the accuracy being only 0.5% lower. However, because the autoencoder architecture remains the same, the deep stack technique shows better performance and is already readily available so it should be the default method of utilizing the hidden representations of the SDAE.
 
+![Figure 6. Confusion matrix with deep bottleneck technique, accuracy = 98.54%.]({{ '/assets/img/EE529final/figure6.png' | relative_url}}){: .mx-auto.d-block :}
 
 ## Conclusion
 
