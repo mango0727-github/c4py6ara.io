@@ -84,8 +84,6 @@ data using the trained SDAE to train the classifier since the neural network is 
 algorithm. Lastly, we will then autoencode the testing data to be classified and to evaluate
 the performance of the classifier and the entire system as a whole.
 
-<img width="1056" height="654" alt="{F6301F48-B2AD-4FD7-AF19-B66B61280237}" src="https://github.com/user-attachments/assets/e3a527c2-2f07-4d71-892f-dea964a379e3" />
-
 
 ### Data preprocessing
 The first preprocessing step is to first arrange the data based on their data types,
