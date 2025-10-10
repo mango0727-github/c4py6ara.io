@@ -125,7 +125,7 @@ where $$y_i$$ is the reconstructed input and $$x_i$$ is the original input witho
 
 $$
 \begin{aligned}
-  \mathcal{L}_{\text{total}} = \frac{(\mathcal{L}_{\text{bin}} + \mathcal{L}_{\text{cat}} + \mathcal{L}_{\text{num}} ) }{3}
+  \mathcal{L}_{\text{total}} = \frac{\mathcal{L}_{\text{bin}} + \mathcal{L}_{\text{cat}} + \mathcal{L}_{\text{num}}}{3}
 \end{aligned}
 $$
 
