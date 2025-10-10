@@ -145,9 +145,10 @@ training to convert the outputs into a probability for classification.
 
 $$
 \begin{aligned}
-  \sigma(\mathbb{z})_i = \frac{ \exp^{z_i} }{ \sum^K_{j=1}\exp^{z_j} },  \text{where \mathbb{z} is the input vector to the softmax function}
+\sigma(\mathbf{z})_i &= \frac{ \exp(z_i) }{ \sum_{j=1}^{K} \exp(z_j) }, \quad \text{where} \mathbf{z} \text{ is the input vector to the softmax function.}
 \end{aligned}
 $$
+
 
 The deep stack technique is also utilized where the output of each layer in the autoencoder is used and stacked into a single vector and then fed into the classifier. This is to take advantage of the autoencoder and leverage all of the learnt information from the encoding process. Because the autoencoder has 3 layers of encoding with output vectors of lengths 128, 64 and 32, the new vector’s length is therefore 224 elements long. There are quite a few hyperparameters in the classifier that can be tuned in the system that are the number of layers, the dropout percentage and number of neurons in each layer. The architecture of the neural network is illustrated in Figure 3.
 
