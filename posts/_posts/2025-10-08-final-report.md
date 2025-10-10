@@ -129,7 +129,7 @@ c_{7,1} & \ldots & c_{7,C} & b_{7,1} & \ldots & b_{7,B} & n_{7,1} & \ldots & n_{
 c_{8,1} & \ldots & c_{8,C} & b_{8,1} & \ldots & b_{8,B} & n_{8,1} & \ldots & n_{8,D}
 \end{array}
 \right]
-\;\;\;\Longrightarrow\;\;\;
+\;\Longrightarrow\;
 \left[
 \begin{array}{cccccccccc}
 c_{7,1} & \ldots & c_{2,C} & b_{1,1} & \ldots & b_{3,B} & n_{3,1} & \ldots & n_{1,D} \\
@@ -143,6 +143,7 @@ c_{8,1} & \ldots & c_{1,C} & b_{1,1} & \ldots & b_{8,B} & n_{1,1} & \ldots & n_{
 \end{array}
 \right]
 $$
+
 
 
 where ci,j
