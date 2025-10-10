@@ -145,7 +145,7 @@ training to convert the outputs into a probability for classification.
 
 $$
 \begin{aligned}
-\sigma(\mathbf{z})_i &= \frac{ \exp(z_i) }{ \sum_{j=1}^{K} \exp(z_j) }, \quad \text{where} \mathbf{z} \text{ is the input vector to the softmax function.}
+\sigma(\mathbf{z})_i &= \frac{ \exp(z_i) }{ \sum_{j=1}^{K} \exp(z_j) }, \quad \text{where } \mathbf{z} \text{ is the input vector to the softmax function.}
 \end{aligned}
 $$
 
