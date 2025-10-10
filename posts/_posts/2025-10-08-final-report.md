@@ -7,6 +7,8 @@ sitemap: false
 hide_last_modified: true
 ---
 
+# Intrusion Detection using Denoising Autoencoders and Deep Learning
+
 ## Introduction 
 Due to the increasing dependence on the Internet in our social lives, it is ever more important
 that proper cybersecurity methods are developed to reduce the harm of any security breaches.
