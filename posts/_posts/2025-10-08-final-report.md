@@ -158,19 +158,30 @@ $$
 \end{aligned}
 $$
 
-where N is the total number of samples. As for categorical data, cross entropy is utilized
-instead,
+where N is the total number of samples. As for categorical data, cross entropy is utilized instead,
 
-where yi j is 1 if true category class for observation i is j, else it is 0. Lastly, mean-square
+$$
+\begin{aligned}
+  \mathcal{L}_{\text{cat}} = - \frac{1}{N}  \sum^N_{i=1} \sum^C_{j=1} y_{i,j} \log(q(x_{i,j}))
+\end{aligned}
+$$
+
+where $$y_{i,j}$$ is 1 if true category class for observation $$i$$ is $$j$$, else it is 0. Lastly, mean-square
 error is used for numerical data,
 
-where yi
+$$
+\begin{aligned}
+  \mathcal{L}_{\text{num}} = \frac{1}{N}  \sum^N_{i=1} (y_i - x_i)^2
+\end{aligned}
+$$
 
-is the reconstructed input and xi
+where $$y_i$$ is the reconstructed input and $$x_i$$ is the original input without noise added. The total loss is then the averaged loss from each loss function,
 
-is the original input without noise added. The
-
-total loss is then the averaged loss from each loss function,
+$$
+\begin{aligned}
+  \mathcal{L}_{\text{total}} = \frac{(\mathcal{L}_{\text{bin}} + \mathcal{L}_{\text{cat}} + \mathcal{L}_{\text{num}} ) }{3}
+\end{aligned}
+$$
 
 Once the SDAE is trained, we will discard the reconstruction head of the autoencoder since
 we will only be using the hidden representations from the encoder for classification. The
