@@ -65,7 +65,7 @@ An example of a data point in the NSK-KDD data set is shown below. It can be see
 preprocessed before being utilized. These steps will be discussed in the following sections.
 | protocol type | service | flag | source bytes | destination bytes | land | wrong fragment | urgent | hot |  $$\cdots$$ | label |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| tcp | http | SF | 217 | 2032 | 0 | 0 | 0 | 0 | \cdots | normal |
+| tcp | http | SF | 217 | 2032 | 0 | 0 | 0 | 0 | $$\cdots$$ | normal |
 
 **Table 3:** Example of a data point in the NSL-KDD data set.
 
