@@ -183,29 +183,25 @@ $$
 \end{aligned}
 $$
 
-Once the SDAE is trained, we will discard the reconstruction head of the autoencoder since
-we will only be using the hidden representations from the encoder for classification. The
-implementation of the SDAE is obtained from the Github repository of [8] and modified to
-be suitable for our application. The file titled nslkdd.pdf is the main notebook containing
-the top level code. The rest of the files are the codes from the Github repository.
+Once the SDAE is trained, we will discard the reconstruction head of the autoencoder since we will only be using the hidden representations from the encoder for classification. The implementation of the SDAE is obtained from the Github repository of [8] and modified to be suitable for our application. The file titled nslkdd.pdf is the main notebook containing the top level code. The rest of the files are the codes from the Github repository.
 
 ### Neural network classifier
-After training the SDAE, the hidden representations from the autoencoder is obtained and
-then fed as inputs into the classifier for classification. The classifier is a deep neural network
-with 5 fully connected (dense) hidden layers with rectified linear unit (ReLU) activation
-functions after each layer.
+After training the SDAE, the hidden representations from the autoencoder is obtained and then fed as inputs into the classifier for classification. The classifier is a deep neural network with 5 fully connected (dense) hidden layers with rectified linear unit (ReLU) activation functions after each layer.
 
 $$
 \begin{aligned}
-  f(x) = \max(0,x)
+  f(x) = \max{0,x}
 \end{aligned}
 $$
 
-As a result, there are 928,005 parameters that will be tuned for the purpose of classifying the
-input data for intrusion detection and determining the type of attack. Not only that, but
-dropout is also utilized where some of the inputs from the input layer is ignored to prevent
-overfitting. Lastly, a softmax layer is used at the output of the neural network only after
+As a result, there are 928,005 parameters that will be tuned for the purpose of classifying the input data for intrusion detection and determining the type of attack. Not only that, but dropout is also utilized where some of the inputs from the input layer is ignored to prevent overfitting. Lastly, a softmax layer is used at the output of the neural network only after
 training to convert the outputs into a probability for classification.
+
+$$
+\begin{aligned}
+  \sigma(\mathbb{z})_i = \frac{\exp^{z_i}}{\sum^K_{j=1}\exp^{z_j}} \text{where $$\mathbb{z}$$ is the input vector to the softmax function}
+\end{aligned}
+$$
 
 The deep stack technique is also utilized where the output of each layer in the autoencoder
 is used and stacked into a single vector and then fed into the classifier. This is to take
