@@ -51,14 +51,19 @@ observed in Table 1.
 **Table 1:** Categories of attack types in the NSL-KDD dataset.
 
 
+The total number of samples in the dataset is 125,973 which we will split into a training and testing set with a 80-20 split. The labels for the entire set are distributed according to the following distribution (Table 2).
 
-The total number of samples in the dataset is 125,973 which we will split into a training and
-testing set with a 80-20 split. The labels for the entire set are distributed according to the
-following distribution (Table 2).
+|      | Normal | Probe | DoS | U2R | R2L |
+| --- | --- | --- | --- | --- | --- |
+| Sample | 67,343 | 11,656 | 45,927 | 52 | 995 | 
+**Table 2:** Example of a data point in the NSL-KDD data set.
 
-An example of a data point in the NSK-KDD data set is shown below. It can be seen
-that there are different types data in the tabular data set and the data will be properly
+An example of a data point in the NSK-KDD data set is shown below. It can be seen that there are different types data in the tabular data set and the data will be properly
 preprocessed before being utilized. These steps will be discussed in the following sections.
+| protocol type | service | flag | source bytes | destination bytes | land | wrong fragment | urgent | hot | . . . | label |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| tcp | http | SF | 217 | 2032 | 0 | 0 | 0 | 0 | . . . | normal |
+**Table 3:** Example of a data point in the NSL-KDD data set.
 
 
 ## Proposed system
@@ -74,6 +79,9 @@ from both the training and testing set to train it. Then, we will encode only th
 data using the trained SDAE to train the classifier since the neural network is a supervised
 algorithm. Lastly, we will then autoencode the testing data to be classified and to evaluate
 the performance of the classifier and the entire system as a whole.
+
+<img width="1056" height="654" alt="{F6301F48-B2AD-4FD7-AF19-B66B61280237}" src="https://github.com/user-attachments/assets/e3a527c2-2f07-4d71-892f-dea964a379e3" />
+
 
 ### Data preprocessing
 The first preprocessing step is to first arrange the data based on their data types,
