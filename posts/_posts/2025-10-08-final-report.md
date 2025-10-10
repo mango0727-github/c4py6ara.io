@@ -88,6 +88,13 @@ the performance of the classifier and the entire system as a whole.
 ### Data preprocessing
 The first preprocessing step is to first arrange the data based on their data types,
 
+$$
+\begin{aligned}
+  \mathbb{D} = [\mathbb{c}_1 \cdots \mathbb{c}_C \mathbb{n}_1 \cdots \mathbb{c}_D \mathbb{b}_1 \cdots \mathbb{b}_B] 
+\end{aligned}
+$$
+
+
 D =
 h
 c1 ... cC n1 ... nD b1 ...bB
