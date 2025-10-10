@@ -56,6 +56,7 @@ The total number of samples in the dataset is 125,973 which we will split into a
 |      | Normal | Probe | DoS | U2R | R2L |
 | --- | --- | --- | --- | --- | --- |
 | Sample | 67,343 | 11,656 | 45,927 | 52 | 995 | 
+
 **Table 2:** Example of a data point in the NSL-KDD data set.
 
 An example of a data point in the NSK-KDD data set is shown below. It can be seen that there are different types data in the tabular data set and the data will be properly
@@ -63,6 +64,7 @@ preprocessed before being utilized. These steps will be discussed in the followi
 | protocol type | service | flag | source bytes | destination bytes | land | wrong fragment | urgent | hot | . . . | label |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | tcp | http | SF | 217 | 2032 | 0 | 0 | 0 | 0 | . . . | normal |
+
 **Table 3:** Example of a data point in the NSL-KDD data set.
 
 
