@@ -154,7 +154,7 @@ When computing the loss of the SDAE, different loss functions are employed depen
 
 $$
 \begin{aligned}
-  \mathcal{L}_{\text{bin}} = - \frac{1}{N}  \sum^N_{i=1}x_i \log (p(x_i)) + (1-x_i)\log(1-p(x_i))
+  \mathcal{L}_{\text{bin}} = - \frac{1}{N}  \sum^N_{i=1} \Big[ x_i \log (p(x_i)) + (1-x_i)\log(1-p(x_i)) \Big]
 \end{aligned}
 $$
 
