@@ -118,7 +118,7 @@ be represented as,
 $$
 \mathbb{D} =
 \left[
-\begin{array}{ccccccccc} % 9 columns (맞게 수정)
+\begin{array}{ccccccccc}
 c_{1,1} & \ldots & c_{1,C} & b_{1,1} & \ldots & b_{1,B} & n_{1,1} & \ldots & n_{1,D} \\
 c_{2,1} & \ldots & c_{2,C} & b_{2,1} & \ldots & b_{2,B} & n_{2,1} & \ldots & n_{2,D} \\
 c_{3,1} & \ldots & c_{3,C} & b_{3,1} & \ldots & b_{3,B} & n_{3,1} & \ldots & n_{3,D} \\
@@ -131,7 +131,7 @@ c_{8,1} & \ldots & c_{8,C} & b_{8,1} & \ldots & b_{8,B} & n_{8,1} & \ldots & n_{
 \right]
 \;\Longrightarrow\;
 \left[
-\begin{array}{ccccccccc} % 오른쪽 행렬도 9 columns
+\begin{array}{ccccccccc}
 c_{7,1} & \ldots & c_{2,C} & b_{1,1} & \ldots & b_{3,B} & n_{3,1} & \ldots & n_{1,D} \\
 c_{5,1} & \ldots & c_{1,C} & b_{7,1} & \ldots & b_{1,B} & n_{7,1} & \ldots & n_{5,D} \\
 c_{3,1} & \ldots & c_{5,C} & b_{3,1} & \ldots & b_{8,B} & n_{3,1} & \ldots & n_{9,D} \\
@@ -143,6 +143,7 @@ c_{8,1} & \ldots & c_{1,C} & b_{1,1} & \ldots & b_{8,B} & n_{1,1} & \ldots & n_{
 \end{array}
 \right]
 $$
+
 
 
 
