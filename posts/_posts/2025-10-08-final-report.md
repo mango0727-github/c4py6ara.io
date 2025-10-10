@@ -55,7 +55,7 @@ observed in Table 1.
 
 The total number of samples in the dataset is 125,973 which we will split into a training and testing set with a 80-20 split. The labels for the entire set are distributed according to the following distribution (Table 2).
 
-|      | Normal | Probe | DoS | U2R | R2L |
+| Classes | Normal | Probe | DoS | U2R | R2L |
 | --- | --- | --- | --- | --- | --- |
 | Sample | 67,343 | 11,656 | 45,927 | 52 | 995 | 
 
