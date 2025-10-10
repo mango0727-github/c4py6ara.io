@@ -194,7 +194,13 @@ After training the SDAE, the hidden representations from the autoencoder is obta
 then fed as inputs into the classifier for classification. The classifier is a deep neural network
 with 5 fully connected (dense) hidden layers with rectified linear unit (ReLU) activation
 functions after each layer.
-f (x) = max(0,x)
+
+$$
+\begin{aligned}
+  f(x) = \max(0,x)
+\end{aligned}
+$$
+
 As a result, there are 928,005 parameters that will be tuned for the purpose of classifying the
 input data for intrusion detection and determining the type of attack. Not only that, but
 dropout is also utilized where some of the inputs from the input layer is ignored to prevent
