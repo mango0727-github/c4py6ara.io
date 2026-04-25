@@ -8,7 +8,9 @@ math: false
 hide_last_modified: true
 ---
 
-I built this project as part of a fuzzing exercise, but it ended up becoming a useful small case study in fuzzer engineering. The repository is here: [project_fuzzer](https://github.com/mango0727-github/project_fuzzer).
+I built this project as part of a fuzzing exercise. The repository is here: [project_fuzzer](https://github.com/mango0727-github/project_fuzzer).
+
+This work was also informed by ideas from two papers: _ClosureX: Compiler Support for Correct Persistent Fuzzing_ and _No Linux, No Problem: Fast and Correct Windows Binary Fuzzing via Target-embedded Snapshotting_.
 
 The main goal was simple: reduce execution overhead enough that the fuzzer spends more time exercising the target and less time rebuilding process state. My earlier versions launched the target through `system()`, which meant paying for a shell on every iteration. Later versions moved to `fork()` and `execl()`, which was already better, but the design still restarted too much machinery for each test case. The final version moved closer to a single-process workflow by keeping a hooked target process alive and sending it new work through a lightweight control channel.
 
