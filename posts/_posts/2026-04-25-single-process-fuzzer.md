@@ -8,7 +8,7 @@ math: false
 hide_last_modified: true
 ---
 
-This post focuses on the fuzzer implementation in `~/assignments/master`. The repository is here: [project_fuzzer](https://github.com/mango0727-github/project_fuzzer).
+The repository is here: [project_fuzzer](https://github.com/mango0727-github/project_fuzzer).
 
 This work was also informed by ideas from two papers: _ClosureX: Compiler Support for Correct Persistent Fuzzing_ and _No Linux, No Problem: Fast and Correct Windows Binary Fuzzing via Target-embedded Snapshotting_.
 
