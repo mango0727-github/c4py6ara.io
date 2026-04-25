@@ -8,17 +8,17 @@ math: false
 hide_last_modified: true
 ---
 
-I built this project as part of a fuzzing exercise. The repository is here: [project_fuzzer](https://github.com/mango0727-github/project_fuzzer).
+This project was developed as part of a fuzzing assignment. The repository is here: [project_fuzzer](https://github.com/mango0727-github/project_fuzzer).
 
 This work was also informed by ideas from two papers: _ClosureX: Compiler Support for Correct Persistent Fuzzing_ and _No Linux, No Problem: Fast and Correct Windows Binary Fuzzing via Target-embedded Snapshotting_.
 
-The main goal was simple: reduce execution overhead enough that the fuzzer spends more time exercising the target and less time rebuilding process state. My earlier versions launched the target through `system()`, which meant paying for a shell on every iteration. Later versions moved to `fork()` and `execl()`, which was already better, but the design still restarted too much machinery for each test case. The final version moved closer to a single-process workflow by keeping a hooked target process alive and sending it new work through a lightweight control channel.
+The main goal was to reduce execution overhead so that the fuzzer spends more time exercising the target and less time rebuilding process state. Earlier versions launched the target through `system()`, which meant paying for a shell on every iteration. Later versions moved to `fork()` and `execl()`, which was already better, but the design still restarted too much machinery for each test case. The final version moved closer to a single-process workflow by keeping a hooked target process alive and sending it new work through a lightweight control channel.
 
 ## Why I focused on process overhead
 
 Fuzzers live and die by throughput. If two fuzzers mutate inputs with similar quality but one runs meaningfully more test cases per second, the faster one will usually explore more states and find bugs earlier.
 
-My optimization path looked roughly like this:
+The implementation evolved roughly as follows:
 
 1. Start from a black-box design that shells out with `system()`.
 2. Remove the shell and invoke the target directly with `fork()` and `execl()`.
@@ -84,13 +84,13 @@ That means the corpus evolves toward inputs that penetrate deeper into the parse
 
 ## Mutation strategy
 
-The interesting part of this project is that it is not just a blind bit-flipper. Since the target format is PDF, pure random mutation causes too many files to die in shallow parsing stages. I added several format-aware mutations to improve the odds of reaching deeper logic.
+This project is not just a blind bit-flipper. Since the target format is PDF, pure random mutation causes too many files to die in shallow parsing stages. Several format-aware mutations were added to improve the odds of reaching deeper logic.
 
 One mutation swaps object bodies between two seed PDFs. The code looks for `obj ... endobj` ranges and replaces one object body with another while keeping the broader file structure intact. That gives the fuzzer a way to make larger semantic jumps than byte-level corruption usually allows.
 
 Another mutation inserts keywords from an external dictionary file, `pdf.dict`, at random positions. This helps the fuzzer inject tokens that are syntactically meaningful to the parser.
 
-I also added mutations that specifically target numeric fields tied to parsing and allocation behavior, such as `/Length`, `/Size`, `/Count`, `/Columns`, `/Predictor`, and font-related entries. These values often influence buffer sizing, loop bounds, decompression behavior, or layout calculations, so they are attractive mutation points.
+The implementation also targets numeric fields tied to parsing and allocation behavior, such as `/Length`, `/Size`, `/Count`, `/Columns`, `/Predictor`, and font-related entries. These values often influence buffer sizing, loop bounds, decompression behavior, or layout calculations, so they are attractive mutation points.
 
 Finally, the mutator flips bytes inside `stream ... endstream` regions and then repairs the PDF’s cross-reference table and trailer by appending a reconstructed `xref` section. That repair step is important. Without it, many mutated files would be rejected immediately as malformed and never reach the interesting code paths.
 
@@ -104,7 +104,7 @@ The fuzzer separates three outcomes:
 2. Real crash by signal
 3. Timeout terminated by `SIGKILL`
 
-Crashing inputs are saved for later triage. Timeout cases are also saved, but they are not added back into the seed pool. I think this is the right tradeoff. A crashing input is valuable for debugging. A hanging input is useful for performance and denial-of-service analysis. But neither is a good candidate for continued mutation if the goal is efficient path exploration.
+Crashing inputs are saved for later triage. Timeout cases are also saved, but they are not added back into the seed pool. A crashing input is valuable for debugging. A hanging input is useful for performance and denial-of-service analysis. But neither is a good candidate for continued mutation if the goal is efficient path exploration.
 
 This distinction also keeps the corpus healthier. If crashers and pathological hang cases are allowed to dominate the pool, the fuzzer wastes cycles mutating inputs that terminate too early or consume too much time.
 
@@ -120,7 +120,7 @@ The second was avoiding ordinary file I/O in the hot path. By writing fuzz input
 
 This is still a small research fuzzer, not a production-quality engine. The coverage map is external, the target-specific logic is tuned for PDF structure, and the corpus strategy is intentionally simple.
 
-If I continue this project, the next improvements I would make are:
+Possible next improvements include:
 
 1. Replace the external coverage handoff with a cleaner shared-memory coverage interface.
 2. Add stronger minimization for interesting inputs so the corpus grows more slowly.
