@@ -1,6 +1,5 @@
 ---
 layout: about
-image: /assets/img/blog/hydejack-9.jpg
 description: >
   Cybersecurity Researcher. Beloved husband and daddy.
 hide_description: true
@@ -40,5 +39,4 @@ During my M.S., I worked as a teaching assistant for two semesters, where I ran 
 ## My hobbies
 
 I am passionate about tennis and horse riding. Especially, I feel privileged to have the opportunity to ride at the KMA as it has its own stable.
-
 
