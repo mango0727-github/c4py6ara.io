@@ -10,7 +10,7 @@ hide_last_modified: true
 
 The repository is here: [project_fuzzer](https://github.com/mango0727-github/project_fuzzer).
 
-This work was also informed by ideas from two papers: _ClosureX: Compiler Support for Correct Persistent Fuzzing_ and _No Linux, No Problem: Fast and Correct Windows Binary Fuzzing via Target-embedded Snapshotting_.
+This work was also informed by ideas from two papers: [_ClosureX: Compiler Support for Correct Persistent Fuzzing_](https://vtechworks.lib.vt.edu/items/3439d99a-9205-40fa-bea0-91bad721bc66) and [_No Linux, No Problem: Fast and Correct Windows Binary Fuzzing via Target-embedded Snapshotting_](https://www.usenix.org/conference/usenixsecurity23/presentation/stone).
 
 The goal of this version is to run a PDF parser repeatedly in one process instead of launching a new process for each input. The target is executed re-entrantly, coverage is checked after each run, and target state is restored before the next testcase begins.
 
