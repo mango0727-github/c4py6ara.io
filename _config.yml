@@ -51,8 +51,14 @@ author:
 menu:
   - title:             About
     url:               /about/
-  - title:             Posts
-    url:               /posts/
+  - title:             Malware analysis
+    url:               /mal_analysis/
+  - title:             Fuzzing
+    url:               /fuzzing/
+  - title:             Data analytics (stats)
+    url:               /data_analytics/
+  - title:             Computer science
+    url:               /computer_sci/
   - title:             Hobbies
     url:               /hobbies/
   # - title:             Cellular Comms
