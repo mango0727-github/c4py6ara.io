@@ -55,6 +55,8 @@ menu:
     url:               /mal_analysis/
   - title:             Fuzzing
     url:               /fuzzing/
+  - title:             5G security
+    url:               /5g_sec/
   - title:             Data analytics (stats)
     url:               /data_analytics/
   - title:             Computer science
