@@ -4,6 +4,7 @@ title: SKT incident overview (from my prev. blog)
 description: >
   An easy-to-understand walk-through from the official initial assessment by the Ministry of Science, Technology, and Communications
 sitemap: false
+categories: [5g_sec]
 ---
 
 ## SKT incident
