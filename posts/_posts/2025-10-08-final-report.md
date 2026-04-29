@@ -4,6 +4,7 @@ title: Intrusion Detection using Denoising Autoencoders and Deep Learning
 description: >
   This post is to archive my project in 2023 with Siyuan Sim.
 sitemap: false
+categories: [data_analytics]
 hide_last_modified: true
 ---
 
