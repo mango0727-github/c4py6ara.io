@@ -1,7 +1,7 @@
 ---
 layout: list
 title: Data analytics and statistics
-slug: mal_analysis
+slug: data_analytics
 description: >
   Notes on data analytics, statistics, probability, and related quantitative methods.
 ---
