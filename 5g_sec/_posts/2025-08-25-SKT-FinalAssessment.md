@@ -4,6 +4,7 @@ title: Thoughts on SKT incident Final Report
 description: >
   This is my thought on SKT incident final report 
 sitemap: false
+categories: [5g_sec]
 hide_last_modified: true
 ---
 
