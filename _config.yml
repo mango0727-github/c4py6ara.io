@@ -52,13 +52,13 @@ menu:
   - title:             About
     url:               /about/
   - title:             Malware analysis
-    url:               /mal_analysis/
+    url:               /mal-analysis/
   - title:             Fuzzing
     url:               /fuzzing/
   - title:             5G security
-    url:               /5g_sec/
+    url:               /5g-sec/
   - title:             Data analytics (stats)
-    url:               /data_analytics/
+    url:               /data-analytics/
   # - title:             Computer science
   #   url:               /computer_sci/
   - title:             Hobbies
