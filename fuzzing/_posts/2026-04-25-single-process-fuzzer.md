@@ -3,7 +3,7 @@ layout: post
 title: Building a Single-Process PDF Fuzzer
 description: >
   Notes on a coverage-guided PDF fuzzer that executes the target in a single process and restores target state between test cases.
-sitemap: false
+sitemap: true
 categories: [fuzzing]
 math: false
 hide_last_modified: true
