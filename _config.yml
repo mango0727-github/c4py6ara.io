@@ -59,6 +59,8 @@ menu:
     url:               /5g-sec/
   - title:             Data analytics (stats)
     url:               /data-analytics/
+  - title:             Cryptography Competition
+    url:               /crypto_analysis/
   # - title:             Computer science
   #   url:               /computer_sci/
   - title:             Hobbies
