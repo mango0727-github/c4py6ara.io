@@ -1,8 +1,18 @@
+---
+layout: post
+title: A Meet-in-the-Middle Attack on 8-Round AES
+description: >
+  This post reviews a paper: a MITM on 8-round AES
+sitemap: false
+categories: [crypto_analysis]
+hide_last_modified: true
+---
+
+
 # [Paper Review] A Meet-in-the-Middle Attack on 8-Round AES — Technical and Mathematical Perspective
 
 논문: *A Meet-in-the-Middle Attack on 8-Round AES*  
 저자: H. Demirci, A. A. Selçuk  
-학회: FSE 2008 :contentReference[oaicite:0]{index=0}  
 
 ---
 
