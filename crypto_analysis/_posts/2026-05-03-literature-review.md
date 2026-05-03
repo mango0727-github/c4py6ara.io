@@ -8,367 +8,349 @@ categories: [crypto_analysis]
 hide_last_modified: true
 ---
 
-
-# [Paper Review] A Meet-in-the-Middle Attack on 8-Round AES — Technical and Mathematical Perspective
-
+# [Paper Review] A Meet-in-the-Middle Attack on 8-Round AES
 논문: A Meet-in-the-Middle Attack on 8-Round AES
 저자: H. Demirci, A. A. Selçuk  
 
 ---
 
-## 1. Introduction
+## 1. Overview
 
-본 논문은 AES에 대한 구조 기반 암호분석의 한 사례로, 기존 square attack 계열을 확장하여 5-round distinguisher를 구성하고 이를 기반으로 meet-in-the-middle (MitM) 공격을 설계한다.
+본 논문은 AES에 대해 5-round distinguisher를 구성하고 이를 기반으로  
+meet-in-the-middle (MitM) 공격을 통해 실제 key recovery를 수행한다.
 
-핵심 목표는 다음과 같다:
+핵심 아이디어는 다음과 같다:
 
-- AES 내부 상태가 완전히 랜덤이 아니라는 점을 수학적으로 보이는 것
-- 그 구조를 이용해 reduced-round AES에 대해 키 탐색을 효율화하는 것
+- AES 내부 mapping은 완전히 random이 아님
+- 특정 structured input에서 저차원 함수 공간에 제한됨
+- 이를 이용해 key 후보를 filtering → 최종 key 복구
 
-이 논문은 실제 AES를 깨는 것이 아니라,  
-AES 내부 구조의 "저차원 표현 가능성"을 이용한 공격 프레임워크를 제시하는 데 의의가 있다.
+즉, 공격의 전체 흐름은 다음과 같다:
 
----
-
-## 2. Background: Square Property and Structural Constraints
-
-AES는 다음과 같은 구조를 갖는다:
-
-\[
-S \in \mathbb{F}_{2^8}^{4 \times 4}
-\]
-
-연산은 다음과 같이 구성된다:
-
-- SubBytes: \( S(x) \)
-- ShiftRows: permutation
-- MixColumns: 선형 변환 \( M \)
-- AddRoundKey: XOR
-
-AES의 중요한 특성 중 하나는 2라운드 이후 full diffusion이다.
-그러나 square attack에서 알려진 바와 같이, 특정 입력 구조에서는 다음 성질이 성립한다:
-
-\[
-\sum_{i=0}^{255} C^{(3)}_{jk}(i) = 0
-\]
-
-이는 AES가 완전히 랜덤 permutation이 아니라 특정 algebraic structure를 가진다는 것을 의미한다.
+## Math
+$$
+\text{Key Recovery} = \text{Function Membership Test} + \text{Key Enumeration}
+$$
 
 ---
 
-## 3. Core Contribution: 5-Round Distinguisher
+## 2. Structural Insight: 5-Round Function Constraint
 
-### 3.1 Problem Setting
+AES 4라운드 mapping:
 
-다음과 같은 plaintext 집합을 고려한다:
+## Math
+$$
+F: a_{11} \mapsto C_{11}^{(4)}
+$$
 
-\[
-P_i = (a_{11} = i, \text{others fixed}), \quad i \in \mathbb{F}_{2^8}
-\]
+이 함수는 다음 parameter로 결정된다:
 
-이 집합은 다음 성질을 갖는다:
-
-- \(a_{11}\): active
-- 나머지 15개 바이트: passive
-
----
-
-### 3.2 Functional View of AES
-
-논문은 AES를 다음과 같이 함수로 본다:
-
-\[
-F: a_{11} \mapsto C_{11}^{(r)}
-\]
-
-특히 \(r = 4\)일 때, 이 함수는 매우 중요한 구조를 가진다.
-
----
-
-### 3.3 4-Round Functional Representation
-
-논문의 핵심 결과:
-
-\[
-C_{11}^{(4)} = F(a_{11}; \theta)
-\]
-
-여기서:
-
-\[
+## Math
+$$
 \theta \in \mathbb{F}_{2^8}^{25}
-\]
+$$
 
-즉, 4라운드 AES 출력은 단 25바이트 파라미터로 결정된다. :contentReference[oaicite:1]{index=1}  
+따라서 함수 공간:
 
-이를 구체적으로 보면:
-
-\[
-\begin{aligned}
-C_{11}^{(4)} =
-&\; 2S(C_{11}^{(3)}) + 3S(C_{22}^{(3)}) \\
-&+ S(C_{33}^{(3)}) + S(C_{44}^{(3)}) + K_{11}^{(4)}
-\end{aligned}
-\]
-
-그리고 각 \(C_{ii}^{(3)}\)는 다음 형태로 표현된다:
-
-\[
-C_{ii}^{(3)} = f_i(a_{11}, c_1, \dots, c_{20}, K^{(3)})
-\]
-
-중요한 점은:
-
-- 모든 diagonal term이 같은 일부 파라미터를 공유
-- 결과적으로 전체 함수가 저차원 공간으로 collapse
-
----
-
-### 3.4 Dimensionality Reduction
-
-일반적으로 함수:
-
-\[
-f: \mathbb{F}_{2^8} \to \mathbb{F}_{2^8}
-\]
-
-의 개수는:
-
-\[
-(2^8)^{2^8} = 2^{2048}
-\]
-
-하지만 AES의 경우:
-
-\[
+## Math
+$$
 |\mathcal{F}| \le 2^{200}
-\]
+$$
 
-따라서:
+반면 random 함수 공간:
 
-\[
-\Pr[f_{\text{random}} \in \mathcal{F}] = 2^{-1848}
-\]
+## Math
+$$
+(2^8)^{2^8} = 2^{2048}
+$$
 
-이 극단적인 차이가 distinguisher의 기반이다.
+즉:
+
+## Math
+$$
+\Pr[\text{random function} \in \mathcal{F}] = 2^{-1848}
+$$
+
+이게 distinguisher의 수학적 핵심이다.
 
 ---
 
-## 4. Extending to 5 Rounds
+## 3. 5-Round Distinguisher
 
-5라운드에서는 inverse 연산을 통해 다음을 얻는다.
+다음 linear combination을 정의한다:
 
-### 4.1 Linear Combination
-
-\[
+## Math
+$$
 Y =
 0E \cdot C_{11}^{(5)} +
 0B \cdot C_{21}^{(5)} +
 0D \cdot C_{31}^{(5)} +
 09 \cdot C_{41}^{(5)}
-\]
+$$
 
----
+key term:
 
-### 4.2 Key Separation
-
-\[
-Y + k^{(5)}
-\]
-
-\[
+## Math
+$$
 k^{(5)} =
 0E \cdot K_{11}^{(5)} +
 0B \cdot K_{21}^{(5)} +
 0D \cdot K_{31}^{(5)} +
 09 \cdot K_{41}^{(5)}
-\]
+$$
 
----
+inverse S-box:
 
-### 4.3 Inversion
-
-\[
+## Math
+$$
 Z = S^{-1}(Y + k^{(5)}) = C_{11}^{(4)}
-\]
+$$
 
 결론:
 
-\[
+## Math
+$$
 a_{11} \mapsto Z \in \mathcal{F}
-\]
-
-즉, 5라운드 AES도 여전히 동일한 제한된 함수 공간을 따른다.
+$$
 
 ---
 
-## 5. Attack Construction
+## 4. Attack Structure
 
-### 5.1 Precomputation Phase
+공격은 다음 3단계로 구성된다:
 
-모든 \(\theta \in \mathbb{F}_{2^8}^{25}\)에 대해:
+1. Precomputation
+2. Key Candidate Filtering
+3. Full Key Recovery
 
-\[
+---
+
+## 5. Precomputation Phase
+
+모든 함수 생성:
+
+## Math
+$$
 F_\theta(i), \quad i = 0, \dots, 255
-\]
-
-계산 및 저장.
+$$
 
 복잡도:
 
-\[
+## Math
+$$
 2^{200} \cdot 2^8 = 2^{208}
-\]
+$$
 
 ---
 
-### 5.2 Online Phase
+## 6. Key Candidate Filtering
 
-#### (1) Forward Guess
+### 6.1 Forward Guess (초기 라운드 키)
 
-\[
-K_{\text{init}} = (K_{11}^{(0)}, K_{22}^{(0)}, K_{33}^{(0)}, K_{44}^{(0)})
-\]
-\[
-K_{11}^{(1)}
-\]
-
----
-
-#### (2) Backward Guess
-
-\[
-K_{11}^{(7)}, K_{24}^{(7)}, K_{33}^{(7)}, K_{42}^{(7)}, k^{(6)}
-\]
+## Math
+$$
+K_{\text{init}} =
+(K_{11}^{(0)}, K_{22}^{(0)}, K_{33}^{(0)}, K_{44}^{(0)}, K_{11}^{(1)})
+$$
 
 ---
 
-#### (3) Partial Decryption
+### 6.2 Backward Guess (마지막 라운드 키)
 
-\[
+## Math
+$$
+K_{\text{final}} =
+(K_{11}^{(7)}, K_{24}^{(7)}, K_{33}^{(7)}, K_{42}^{(7)}, k^{(6)})
+$$
+
+---
+
+### 6.3 Partial Decryption
+
+## Math
+$$
 C^{(7)} \rightarrow C_{11}^{(5)}
-\]
+$$
 
-256개 시퀀스 생성:
+Sequence:
 
-\[
+## Math
+$$
 S = (C_{11}^{(5)}(i))_{i=0}^{255}
-\]
+$$
 
 ---
 
-#### (4) Matching
+### 6.4 Matching Condition
 
-\[
+## Math
+$$
 S \in \mathcal{F}
-\]
+$$
 
 즉:
 
-\[
+## Math
+$$
 \exists \theta \text{ s.t. } S = F_\theta
-\]
+$$
 
 ---
 
-## 6. Complexity Analysis
+### 6.5 의미
 
-### Time
+이 단계는 단순한 검증이 아니라:
 
-\[
-2^{72} \quad (\text{7-round})
-\]
+## Math
+$$
+\text{Key Candidate Space} \rightarrow \text{Highly Reduced Subset}
+$$
 
-\[
-2^{200} \quad (\text{8-round AES-256})
-\]
-
----
-
-### Memory
-
-\[
-\approx 2^{206} \text{ blocks}
-\]
+으로 줄이는 단계다.
 
 ---
 
-### Data
+## 7. Key Recovery (핵심)
 
-\[
-2^{32} \text{ chosen plaintexts}
-\]
+여기서 중요한 부분이다.
 
----
+### 7.1 surviving key 후보
 
-## 7. Optimization: XOR Trick
+matching 이후 남는 key 후보는 극히 적다.
 
-다음 변환을 사용:
+확률적으로:
 
-\[
-S(F(i)) \oplus S(F(0))
-\]
+## Math
+$$
+\Pr[\text{false match}] = 2^{-1848}
+$$
 
-효과:
-
-- \(k^{(5)}\) 제거
-- key guess space 감소
-- complexity 감소 (\(2^8\))
+따라서 surviving key는 거의 실제 key이다.
 
 ---
 
-## 8. Discussion
+### 7.2 추가 key byte 복구
 
-### 8.1 Why This Works
+논문은 다음을 반복한다:
 
-이 공격은 AES의 다음 약점을 이용한다:
+## Math
+$$
+C_{11}^{(5)}, C_{21}^{(5)}, C_{31}^{(5)}, C_{41}^{(5)}
+$$
 
-- 높은 diffusion에도 불구하고
-- 특정 structured input에 대해
-- 내부 상태가 low-dimensional manifold에 존재
+각각에 대해 동일 공격 수행
+
+→ 총 4번 수행
+
+결과:
+
+- 마지막 2라운드의 대부분 key byte 복구
+
+---
+
+### 7.3 Remaining Key Search
+
+남은 key byte에 대해:
+
+## Math
+$$
+\text{Exhaustive Search}
+$$
+
+수식적으로:
+
+## Math
+$$
+K = (K_{\text{recovered}} \parallel K_{\text{remaining}})
+$$
+
+---
+
+### 7.4 전체 Key Recovery 구조
+
+전체 흐름:
+
+$$
+\begin{aligned}
+\text{All Keys}
+&\xrightarrow{\text{MitM filtering}}
+\text{Small candidate set} \\
+&\xrightarrow{\text{multi-target filtering}}
+\text{Almost unique key} \\
+&\xrightarrow{\text{exhaustive search}}
+\text{Full key recovered}
+\end{aligned}
+$$
+
+---
+
+## 8. Complexity
+
+## Math
+Time (7-round) $$ \approx 2^{72} $$
+
+## Math
+Time (8-round AES-256) $$ \approx 2^{200} $$
+
+## Math
+Memory $$ \approx 2^{206} $$
+
+## Math
+Data $$ 2^{32} $$
+
+---
+
+## 9. 핵심 해석
+
+이 공격의 본질은 다음이다:
+
+### 기존 공격
+
+## Math
+$$
+\text{Key Search} = \text{Brute Force}
+$$
+
+---
+
+### 이 논문
+
+## Math
+$$
+\text{Key Search} =
+\text{Function Membership Filtering}
++ \text{Reduced Brute Force}
+$$
+
+---
 
 즉:
 
-\[
-\text{AES} \neq \text{random permutation}
-\]
+## Math
+$$
+\text{Key Recovery} =
+\text{Structure} + \text{Search}
+$$
 
 ---
 
-### 8.2 Limitation
+## 10. Conclusion
 
-- 메모리: \(2^{206}\)
-- precomputation: \(2^{208}\)
-- practical infeasibility
+이 논문은 단순한 distinguisher 제시가 아니라  
+실제 key recovery까지 가능한 공격 프레임워크를 완성한다.
 
----
+핵심 기여:
 
-### 8.3 Research Significance
+1. AES 내부를 함수 공간으로 모델링
+2. 그 공간이 극도로 제한됨을 보임
+3. 이를 이용해 key 후보를 강력하게 filtering
+4. 최종적으로 full key recovery 수행
 
-이 논문의 핵심 기여는 다음과 같다:
+결론적으로 이 공격은 다음으로 요약된다:
 
-1. AES 내부 구조를 함수 공간 관점에서 분석
-2. distinguisher를 function-level constraint로 확장
-3. MitM을 "function membership test"로 재해석
+## Math
+$$
+\text{AES security} \Rightarrow \text{function space indistinguishability}
+$$
 
----
-
-## 9. Conclusion
-
-이 논문은 AES의 구조적 특성을 이용해 reduced-round 공격을 설계한 대표적인 연구이다.
-
-핵심 메시지는 다음과 같다:
-
-\[
-\text{AES 내부는 완전히 랜덤이 아니라 구조적 제약을 가진다}
-\]
-
-그리고 이 구조는:
-
-\[
-\text{key recovery problem} \rightarrow \text{function membership problem}
-\]
-
-으로 변환될 수 있다.
-
-이러한 관점은 이후 암호분석에서 매우 중요한 방향성을 제공한다.
+그리고 이 논문은 그 가정을 부분적으로 깨는 구조를 보여준다.
