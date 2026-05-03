@@ -11,14 +11,14 @@ hide_last_modified: true
 
 # [Paper Review] A Meet-in-the-Middle Attack on 8-Round AES — Technical and Mathematical Perspective
 
-논문: *A Meet-in-the-Middle Attack on 8-Round AES*  
+논문: A Meet-in-the-Middle Attack on 8-Round AES
 저자: H. Demirci, A. A. Selçuk  
 
 ---
 
 ## 1. Introduction
 
-본 논문은 AES에 대한 **구조 기반 암호분석(structural cryptanalysis)**의 한 사례로, 기존 square attack 계열을 확장하여 **5-round distinguisher**를 구성하고 이를 기반으로 **meet-in-the-middle (MitM) 공격**을 설계한다.
+본 논문은 AES에 대한 구조 기반 암호분석의 한 사례로, 기존 square attack 계열을 확장하여 5-round distinguisher를 구성하고 이를 기반으로 meet-in-the-middle (MitM) 공격을 설계한다.
 
 핵심 목표는 다음과 같다:
 
@@ -26,7 +26,7 @@ hide_last_modified: true
 - 그 구조를 이용해 reduced-round AES에 대해 키 탐색을 효율화하는 것
 
 이 논문은 실제 AES를 깨는 것이 아니라,  
-**AES 내부 구조의 "저차원 표현 가능성"을 이용한 공격 프레임워크를 제시**하는 데 의의가 있다.
+AES 내부 구조의 "저차원 표현 가능성"을 이용한 공격 프레임워크를 제시하는 데 의의가 있다.
 
 ---
 
@@ -45,8 +45,7 @@ S \in \mathbb{F}_{2^8}^{4 \times 4}
 - MixColumns: 선형 변환 \( M \)
 - AddRoundKey: XOR
 
-AES의 중요한 특성 중 하나는 **2라운드 이후 full diffusion**이다.
-
+AES의 중요한 특성 중 하나는 2라운드 이후 full diffusion이다.
 그러나 square attack에서 알려진 바와 같이, 특정 입력 구조에서는 다음 성질이 성립한다:
 
 \[
@@ -120,8 +119,8 @@ C_{ii}^{(3)} = f_i(a_{11}, c_1, \dots, c_{20}, K^{(3)})
 
 중요한 점은:
 
-- 모든 diagonal term이 **같은 일부 파라미터를 공유**
-- 결과적으로 전체 함수가 **저차원 공간으로 collapse**
+- 모든 diagonal term이 같은 일부 파라미터를 공유
+- 결과적으로 전체 함수가 저차원 공간으로 collapse
 
 ---
 
@@ -326,7 +325,7 @@ S(F(i)) \oplus S(F(0))
 
 - 높은 diffusion에도 불구하고
 - 특정 structured input에 대해
-- 내부 상태가 **low-dimensional manifold**에 존재
+- 내부 상태가 low-dimensional manifold에 존재
 
 즉:
 
