@@ -14,70 +14,114 @@ hide_last_modified: true
 
 ---
 
-## 1. Overview
+## 1. 리뷰 개요
 
-본 논문은 AES에 대해 5-round distinguisher를 구성하고 이를 기반으로  
-meet-in-the-middle (MitM) 공격을 통해 실제 key recovery를 수행한다.
+이 논문은 AES에 대한 기존 cryptanalysis 흐름에서 한 단계 진화된 접근을 제시한다.  
+핵심은 단순히 differential이나 square property를 사용하는 것이 아니라,  
+AES 내부를 **함수 공간(function space)**으로 바라보고 그 구조적 제약을 이용한다는 점이다.
 
-핵심 아이디어는 다음과 같다:
+결과적으로 이 논문은 다음을 수행한다:
 
-- AES 내부 mapping은 완전히 random이 아님
-- 특정 structured input에서 저차원 함수 공간에 제한됨
-- 이를 이용해 key 후보를 filtering → 최종 key 복구
+- 5-round distinguisher 제시
+- 이를 기반으로 meet-in-the-middle 공격 설계
+- 실제 key recovery까지 이어지는 공격 구성
 
-즉, 공격의 전체 흐름은 다음과 같다:
-
-## Math
-$$
-\text{Key Recovery} = \text{Function Membership Test} + \text{Key Enumeration}
-$$
+중요한 점은, 이 공격이 AES를 깨는 것이 아니라  
+**AES 내부가 얼마나 “비랜덤적인 구조”를 가지는지를 보여준다**는 데 있다.
 
 ---
 
-## 2. Structural Insight: 5-Round Function Constraint
+## 2. 기존 연구와의 차별점
 
-AES 4라운드 mapping:
+AES 분석의 주요 흐름은 다음과 같다:
 
-## Math
-$$
-F: a_{11} \mapsto C_{11}^{(4)}
-$$
+- square attack: 구조 기반 (balanced property)
+- differential/linear: 통계 기반
+- impossible differential: 경로 기반
 
-이 함수는 다음 parameter로 결정된다:
+이 논문은 완전히 다른 관점을 취한다:
 
-## Math
-$$
-\theta \in \mathbb{F}_{2^8}^{25}
-$$
+> AES 내부 mapping을 하나의 함수로 보고, 그 함수가 속한 공간을 분석한다.
 
-따라서 함수 공간:
+즉, 공격 대상은 key가 아니라 다음이다:
 
 ## Math
 $$
-|\mathcal{F}| \le 2^{200}
+F: a_{11} \mapsto C_{11}^{(r)}
 $$
 
-반면 random 함수 공간:
+이 함수가 random인지 아닌지를 판단하는 것이 핵심이다.
+
+---
+
+## 3. 핵심 아이디어: 함수 공간의 붕괴
+
+논문의 가장 중요한 insight는 다음 한 줄로 정리된다:
+
+> AES 4라운드 mapping은 2048비트 자유도를 가지지 않는다.
+
+이를 수식으로 보면:
+
+## Math
+$$
+f: \mathbb{F}_{2^8} \to \mathbb{F}_{2^8}
+$$
+
+가능한 함수 수는:
 
 ## Math
 $$
 (2^8)^{2^8} = 2^{2048}
 $$
 
+하지만 AES의 경우:
+
+## Math
+$$
+|\mathcal{F}| \le 2^{200}
+$$
+
 즉:
 
 ## Math
 $$
-\Pr[\text{random function} \in \mathcal{F}] = 2^{-1848}
+\frac{2^{200}}{2^{2048}} = 2^{-1848}
 $$
 
-이게 distinguisher의 수학적 핵심이다.
+이 의미는 매우 강력하다.
+
+- AES 내부 mapping은 거의 deterministic structure를 가진다
+- random function과 비교하면 극도로 작은 subset에 속한다
+
+이것이 바로 distinguisher의 수학적 본질이다.
 
 ---
 
-## 3. 5-Round Distinguisher
+## 4. 왜 이런 현상이 발생하는가?
 
-다음 linear combination을 정의한다:
+이 부분이 논문의 기술적 핵심이다.
+
+AES는 strong diffusion을 가지지만, 다음 특성이 존재한다:
+
+- MixColumns는 선형 변환
+- S-box는 비선형이지만 입력 구조에 따라 correlation 유지
+- diagonal path에서 parameter sharing 발생
+
+결과적으로 다음과 같은 현상이 발생한다:
+
+- 서로 다른 경로의 intermediate 값들이 독립적이지 않음
+- 일부 constant들이 여러 경로에서 공유됨
+- 전체 표현이 **25개의 byte parameter로 collapse**
+
+이것은 일종의 “low-rank representation”으로 볼 수 있다.
+
+---
+
+## 5. 5-Round Distinguisher의 의미
+
+논문은 이 구조를 5라운드까지 확장한다.
+
+핵심 연산은 inverse MixColumns 기반 linear combination이다:
 
 ## Math
 $$
@@ -88,269 +132,185 @@ Y =
 09 \cdot C_{41}^{(5)}
 $$
 
-key term:
+그리고:
 
 ## Math
 $$
-k^{(5)} =
-0E \cdot K_{11}^{(5)} +
-0B \cdot K_{21}^{(5)} +
-0D \cdot K_{31}^{(5)} +
-09 \cdot K_{41}^{(5)}
+Z = S^{-1}(Y + k^{(5)})
 $$
 
-inverse S-box:
+이때:
 
 ## Math
 $$
-Z = S^{-1}(Y + k^{(5)}) = C_{11}^{(4)}
+Z = C_{11}^{(4)}
 $$
 
-결론:
+즉, 5라운드 출력에서 다시 4라운드 구조로 돌아간다.
 
-## Math
-$$
-a_{11} \mapsto Z \in \mathcal{F}
-$$
+이 의미는 다음과 같다:
+
+> 5라운드 AES조차 여전히 25-byte 함수 공간 제약을 유지한다.
 
 ---
 
-## 4. Attack Structure
+## 6. 공격 설계: MitM + Function Matching
 
-공격은 다음 3단계로 구성된다:
+이제 이 구조를 실제 공격으로 연결한다.
 
-1. Precomputation
-2. Key Candidate Filtering
-3. Full Key Recovery
+### 핵심 전략
+
+1. 가능한 모든 함수 \(F_\theta\)를 미리 계산
+2. 실제 암호문에서 partial decryption 수행
+3. 결과 sequence가 해당 함수 공간에 속하는지 확인
+
+즉, 공격은 다음 문제로 환원된다:
+
+## Math
+$$
+\text{Given } S,\quad S \in \mathcal{F} \; ?
+$$
+
+이는 단순한 비교가 아니라:
+
+> function membership test
+
+이다.
 
 ---
 
-## 5. Precomputation Phase
+## 7. Key Recovery 과정
 
-모든 함수 생성:
+이 논문에서 중요한 부분은 단순 distinguisher가 아니라  
+**실제 key recovery까지 이어진다는 점**이다.
 
-## Math
-$$
-F_\theta(i), \quad i = 0, \dots, 255
-$$
+### 7.1 Key 후보 필터링
 
-복잡도:
+앞쪽과 뒤쪽 key를 일부 guess하고:
 
-## Math
-$$
-2^{200} \cdot 2^8 = 2^{208}
-$$
+- forward computation
+- backward partial decryption
 
----
+을 수행한다.
 
-## 6. Key Candidate Filtering
-
-### 6.1 Forward Guess (초기 라운드 키)
-
-## Math
-$$
-K_{\text{init}} =
-(K_{11}^{(0)}, K_{22}^{(0)}, K_{33}^{(0)}, K_{44}^{(0)}, K_{11}^{(1)})
-$$
-
----
-
-### 6.2 Backward Guess (마지막 라운드 키)
-
-## Math
-$$
-K_{\text{final}} =
-(K_{11}^{(7)}, K_{24}^{(7)}, K_{33}^{(7)}, K_{42}^{(7)}, k^{(6)})
-$$
-
----
-
-### 6.3 Partial Decryption
-
-## Math
-$$
-C^{(7)} \rightarrow C_{11}^{(5)}
-$$
-
-Sequence:
-
-## Math
-$$
-S = (C_{11}^{(5)}(i))_{i=0}^{255}
-$$
-
----
-
-### 6.4 Matching Condition
+그 후:
 
 ## Math
 $$
 S \in \mathcal{F}
 $$
 
+조건을 만족하는 key만 남긴다.
+
+이 과정은 brute force와 본질적으로 다르다:
+
+## Math
+$$
+\text{Key Space} \rightarrow \text{Filtered Key Space}
+$$
+
+---
+
+### 7.2 왜 filtering이 강력한가?
+
+false positive 확률:
+
+## Math
+$$
+2^{-1848}
+$$
+
 즉:
 
-## Math
-$$
-\exists \theta \text{ s.t. } S = F_\theta
-$$
+- 잘못된 key가 살아남을 확률은 사실상 0
+- surviving key는 거의 정답
 
 ---
 
-### 6.5 의미
+### 7.3 전체 key 복구
 
-이 단계는 단순한 검증이 아니라:
-
-## Math
-$$
-\text{Key Candidate Space} \rightarrow \text{Highly Reduced Subset}
-$$
-
-으로 줄이는 단계다.
-
----
-
-## 7. Key Recovery (핵심)
-
-여기서 중요한 부분이다.
-
-### 7.1 surviving key 후보
-
-matching 이후 남는 key 후보는 극히 적다.
-
-확률적으로:
-
-## Math
-$$
-\Pr[\text{false match}] = 2^{-1848}
-$$
-
-따라서 surviving key는 거의 실제 key이다.
-
----
-
-### 7.2 추가 key byte 복구
+공격은 한 번으로 끝나지 않는다.
 
 논문은 다음을 반복한다:
 
-## Math
-$$
-C_{11}^{(5)}, C_{21}^{(5)}, C_{31}^{(5)}, C_{41}^{(5)}
-$$
+- 다른 state byte를 target으로 설정
+- 동일한 공격 수행
 
-각각에 대해 동일 공격 수행
+이를 통해:
 
-→ 총 4번 수행
+- 마지막 라운드 key 대부분 복구
+- 이후 남은 key는 exhaustive search
 
-결과:
-
-- 마지막 2라운드의 대부분 key byte 복구
-
----
-
-### 7.3 Remaining Key Search
-
-남은 key byte에 대해:
+결과적으로:
 
 ## Math
 $$
-\text{Exhaustive Search}
-$$
-
-수식적으로:
-
-## Math
-$$
-K = (K_{\text{recovered}} \parallel K_{\text{remaining}})
+K = K_{\text{recovered}} \cup K_{\text{remaining}}
 $$
 
 ---
 
-### 7.4 전체 Key Recovery 구조
+## 8. Complexity 평가
 
-전체 흐름:
+이 공격의 특징은 다음과 같다:
 
-$$
-\begin{aligned}
-\text{All Keys}
-&\xrightarrow{\text{MitM filtering}}
-\text{Small candidate set} \\
-&\xrightarrow{\text{multi-target filtering}}
-\text{Almost unique key} \\
-&\xrightarrow{\text{exhaustive search}}
-\text{Full key recovered}
-\end{aligned}
-$$
+- Time: \(2^{72}\) (7-round)
+- Time: \(2^{200}\) (8-round AES-256)
+- Memory: \(2^{206}\)
+- Precomputation: \(2^{208}\)
+
+즉, 계산적으로는 brute force보다 빠르지만  
+메모리와 precomputation이 매우 크다.
 
 ---
 
-## 8. Complexity
+## 9. 논문의 의미 (Critical Insight)
 
-## Math
-Time (7-round) $$ \approx 2^{72} $$
+이 논문의 진짜 가치는 공격 자체가 아니다.
 
-## Math
-Time (8-round AES-256) $$ \approx 2^{200} $$
+핵심은 다음 insight다:
 
-## Math
-Memory $$ \approx 2^{206} $$
+> AES는 strong cipher이지만, 내부는 완전히 random하지 않다.
 
-## Math
-Data $$ 2^{32} $$
+그리고 더 중요한 해석:
 
----
+> AES 내부 구조는 high-dimensional random object가 아니라  
+> low-dimensional structured object이다.
 
-## 9. 핵심 해석
-
-이 공격의 본질은 다음이다:
-
-### 기존 공격
-
-## Math
-$$
-\text{Key Search} = \text{Brute Force}
-$$
+이 관점은 이후 연구에서 매우 중요하다.
 
 ---
 
-### 이 논문
+## 10. 한계
 
-## Math
-$$
-\text{Key Search} =
-\text{Function Membership Filtering}
-+ \text{Reduced Brute Force}
-$$
+이 공격의 한계는 명확하다:
+
+- 현실적으로 불가능한 메모리 요구
+- reduced-round에만 적용
+- chosen plaintext 필요
+
+따라서 practical attack은 아니다.
 
 ---
 
-즉:
+## 11. 결론
+
+이 논문은 AES를 깨는 논문이 아니다.  
+대신 다음을 보여준다:
+
+## Math
+$$
+\text{AES internal mapping} \subset \text{restricted function space}
+$$
+
+그리고 이를 이용해:
 
 ## Math
 $$
 \text{Key Recovery} =
-\text{Structure} + \text{Search}
+\text{Function Filtering} + \text{Reduced Search}
 $$
 
----
+이라는 새로운 cryptanalysis 패러다임을 제시한다.
 
-## 10. Conclusion
-
-이 논문은 단순한 distinguisher 제시가 아니라  
-실제 key recovery까지 가능한 공격 프레임워크를 완성한다.
-
-핵심 기여:
-
-1. AES 내부를 함수 공간으로 모델링
-2. 그 공간이 극도로 제한됨을 보임
-3. 이를 이용해 key 후보를 강력하게 filtering
-4. 최종적으로 full key recovery 수행
-
-결론적으로 이 공격은 다음으로 요약된다:
-
-## Math
-$$
-\text{AES security} \Rightarrow \text{function space indistinguishability}
-$$
-
-그리고 이 논문은 그 가정을 부분적으로 깨는 구조를 보여준다.
+이것이 이 논문의 핵심 기여다.
