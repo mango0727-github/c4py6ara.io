@@ -105,15 +105,3 @@ The first was removing per-input process creation from the hot path. The fuzzing
 
 The second was keeping the input path simple and cheap. The fuzzer reuses one mapped temporary file in `/dev/shm`, mutates it in place, truncates it to the current testcase size, and passes the same path to the target on each run. This avoids repeated file creation and keeps most of the hot path memory-backed.
 
-## Limits and next steps
-
-This is still a target-specific research implementation rather than a general-purpose fuzzing framework. Correctness depends on how well the runtime resets target state, and the current build assumes a specially instrumented and linked Xpdf `pdftotext` target.
-
-Possible next improvements include:
-
-1. Expand the reset mechanism beyond heap, `FILE *`, and writable globals.
-2. Add stronger corpus minimization so interesting seeds do not grow too quickly.
-3. Improve the PDF-aware mutator with more structure-aware parsing.
-4. Add explicit crash handling and deduplication in the main loop.
-
-Even in this form, the implementation is a useful example of what single-process fuzzing requires in practice. Running the target in one process is only one part of the problem. Coverage reset, resource cleanup, global-state restoration, and exit interception are what make repeated execution possible.
