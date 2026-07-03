@@ -3,6 +3,7 @@ layout: about
 description: >
   Cybersecurity Researcher. Beloved husband and daddy.
 hide_description: true
+no_toc: true
 redirect_from:
   - /download/
   - /cv/
@@ -10,11 +11,32 @@ redirect_from:
 
 # About (CV)
 
-**[Download CV (PDF)]({{ site.baseurl }}/assets/cv/joonyoung-jeong-cv.pdf)**
+<style>
+  .cv-embed {
+    display: block;
+    width: 100%;
+    height: 90vh;
+    min-height: 600px;
+    margin: 0 0 2rem;
+    border: 0;
+  }
+  @media screen and (min-width: 1200px) {
+    .cv-embed {
+      width: calc(100% + 9rem);
+      margin-left: 1.5rem;
+    }
+  }
+  @media screen and (min-width: 1664px) {
+    .cv-embed {
+      width: calc(100% + 15rem);
+      margin-left: 3rem;
+    }
+  }
+</style>
 
-<object data="{{ site.baseurl }}/assets/cv/joonyoung-jeong-cv.pdf" type="application/pdf" style="width:100%;height:90vh;min-height:600px;">
+<object class="cv-embed" data="{{ site.baseurl }}/assets/cv/joonyoung-jeong-cv.pdf" type="application/pdf">
   <p>Your browser cannot display PDFs inline.
-  <a href="{{ site.baseurl }}/assets/cv/joonyoung-jeong-cv.pdf">Download the CV (PDF)</a> instead.</p>
+  <a href="{{ site.baseurl }}/assets/cv/joonyoung-jeong-cv.pdf">Open the CV (PDF)</a> instead.</p>
 </object>
 
 ## More about me
