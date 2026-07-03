@@ -51,6 +51,8 @@ author:
 menu:
   - title:             About
     url:               /about/
+  - title:             CV
+    url:               /cv/
   - title:             Malware analysis
     url:               /mal-analysis/
   - title:             Fuzzing
