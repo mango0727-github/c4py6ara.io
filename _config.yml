@@ -49,10 +49,8 @@ author:
 
 # Add links to the sidebar.
 menu:
-  - title:             About
+  - title:             About (CV)
     url:               /about/
-  - title:             CV
-    url:               /cv/
   - title:             Malware analysis
     url:               /mal-analysis/
   - title:             Fuzzing
