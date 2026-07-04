@@ -108,8 +108,10 @@ apple_touch_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAA
 # ----------------------------------------------------------------------------------------
  
 # Sidebar image and theme color of the site.
-accent_image:          /assets/img/back_ground_img-web.jpg
-accent_color:          rgb(139,69,19)
+accent_image:
+  background:          "#202020 url('/c4py6ara.io/assets/img/back_ground_img-web.jpg') 40% 68% / cover no-repeat"
+  overlay:             true
+accent_color:          rgb(198,72,20)
 
 # This is used for the `theme-color` meta tag,
 # which changes the background color of the browser UI in certain browsers.
