@@ -109,7 +109,7 @@ apple_touch_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAA
  
 # Sidebar image and theme color of the site.
 accent_image:
-  background:          "#202020 url('/c4py6ara.io/assets/img/back_ground_img-web.jpg') 40% 85% / cover no-repeat"
+  background:          "#202020 url('/c4py6ara.io/assets/img/back_ground_img-web.jpg') 33% 85% / cover no-repeat"
   overlay:             true
 accent_color:          rgb(198,72,20)
 
