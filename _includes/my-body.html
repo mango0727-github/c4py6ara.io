@@ -91,3 +91,86 @@ Example code for using Matamo as alternative analytics solution.
 </script>
 {% endif %}
 {% endcomment %}
+
+<!--
+One-line news banner shown on the cover (photo) screen of the home page.
+Content lives in _data/news.yml; it fades out as soon as the visitor scrolls.
+-->
+{% if site.data.news.text and site.data.news.text != "" %}
+<style>
+  #_newsLine {
+    position: fixed;
+    left: 50%;
+    bottom: calc(1.75rem + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 50;
+    max-width: min(90vw, 40rem);
+    box-sizing: border-box;
+    padding: 0.5em 1.25em;
+    border-radius: 2em;
+    background: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+  }
+  #_newsLine.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  #_newsLine a {
+    color: inherit;
+    text-decoration: none;
+  }
+  #_newsLine .news-tag {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-right: 0.5em;
+  }
+</style>
+{% assign _news_url = site.data.news.url %}
+<div id="_newsLine" role="status">
+  {% if _news_url and _news_url != "" %}<a href="{% if _news_url contains '://' %}{{ _news_url }}{% else %}{{ _news_url | relative_url }}{% endif %}">{% endif %}<span class="news-tag">NEWS</span>{{ site.data.news.text | escape }}{% if _news_url and _news_url != "" %}</a>{% endif %}
+</div>
+<script>
+  (function () {
+    var el = document.getElementById('_newsLine');
+    if (!el) return;
+
+    var home = '{{ site.baseurl }}/';
+
+    function isHome() {
+      var p = location.pathname;
+      return p === home || p === home + 'index.html' || p + '/' === home;
+    }
+
+    function update() {
+      if (isHome() && window.scrollY < 30) el.classList.add('show');
+      else el.classList.remove('show');
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+
+    // Hydejack navigates via push-state without full page loads,
+    // so re-evaluate visibility around client-side navigation too.
+    var pushState = document.getElementById('_pushState');
+    if (pushState) {
+      pushState.addEventListener('hy-push-state-start', function () {
+        el.classList.remove('show');
+      });
+      pushState.addEventListener('hy-push-state-after', function () {
+        setTimeout(update, 100);
+      });
+    }
+
+    update();
+  })();
+</script>
+{% endif %}
