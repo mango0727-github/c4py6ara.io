@@ -49,10 +49,12 @@ const pdfHref = withBase(site.cv.pdfPath);
 
   .cv-embed {
     display: block;
-    width: 100%;
+    /* 1.5x the content-column width, centered, capped at the viewport */
+    width: min(150%, calc(100vw - 2rem));
+    margin-block: 1rem 2rem;
+    margin-inline: calc((100% - min(150%, calc(100vw - 2rem))) / 2);
     height: 90vh;
     min-height: 600px;
-    margin: 1rem 0 2rem;
     border: 1px solid var(--global-divider-color);
     border-radius: 0.375rem;
   }
