@@ -52,12 +52,6 @@ const postYears = [...postsByYear.keys()].sort((a, b) => b - a);
 ---
 
 <PageLayout title={`Blog — Page ${currentPage}`} description={site.blog.description}>
-  <!-- Header bar -->
-  <div class="header-bar">
-    <h1>{site.blog.name}</h1>
-    <h2>{site.blog.description}</h2>
-  </div>
-
   <!-- Tag / category list + all-tags link -->
   <div class="tag-category-list">
     <ul class="m-0 p-0">
