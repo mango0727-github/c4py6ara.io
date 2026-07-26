@@ -25,8 +25,14 @@ const pdfHref = withBase(site.cv.pdfPath);
     </header>
 
     <article>
+      <p class="cv-actions">
+        <a class="cv-open-btn" href={pdfHref} target="_blank" rel="noopener noreferrer">
+          <Icon name="fa-solid:file-pdf" /> Open the CV (PDF)
+        </a>
+      </p>
+      <!-- Mobile browsers cannot display PDFs inline; the embed is hidden there
+           and the button above is the primary way to open the CV. -->
       <object class="cv-embed" data={pdfHref} type="application/pdf" aria-label="CV PDF">
-        <!-- Fallback for browsers (most mobile ones) that cannot display PDFs inline -->
         <p class="cv-fallback">
           Your browser cannot display PDFs inline.
           <a href={pdfHref} target="_blank" rel="noopener noreferrer">Open the CV (PDF)</a> instead.
@@ -67,5 +73,32 @@ const pdfHref = withBase(site.cv.pdfPath);
 
   .cv-fallback a {
     color: var(--global-theme-color);
+  }
+
+  .cv-actions {
+    margin: 1.5rem 0 0;
+  }
+
+  .cv-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--global-theme-color);
+    border-radius: 0.375rem;
+    color: var(--global-theme-color);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .cv-open-btn:hover {
+    background: var(--global-theme-color);
+    color: var(--global-hover-text-color, #fff);
+  }
+
+  @media (max-width: 768px) {
+    .cv-embed {
+      display: none;
+    }
   }
 </style>

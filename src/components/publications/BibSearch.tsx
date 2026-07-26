@@ -174,9 +174,14 @@ function PublicationEntry({
 
         {/* Right column: content */}
         <div id={entry.key} className={contentColClass}>
-          {/* Title — links to internal detail page when available, otherwise to external URL */}
+          {/* Title — links straight to the PDF when one exists, then to the
+              internal detail page, then to an external URL */}
           <div className="title">
-            {detailBase !== undefined ? (
+            {pdfPath ? (
+              <a href={pdfHref} target="_blank" rel="noopener noreferrer">
+                {title}
+              </a>
+            ) : detailBase !== undefined ? (
               <a href={`${detailBase}/publications/${entry.key}/`}>{title}</a>
             ) : url ? (
               <a href={url} target="_blank" rel="noopener noreferrer">
