@@ -1,35 +1,25 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import { useTranslations } from "@/i18n";
-import config from "@/config";
-
-const locale = Astro.currentLocale ?? config.site.lang;
-const t = useTranslations(locale);
+import { site } from '@config/site';
+import Base from '@layouts/Base.astro';
 ---
 
-<Layout title={`${t.notFound.title} | ${config.site.title}`}>
-  <Header />
-
-  <main
-    id="main-content"
-    class="app-layout flex flex-1 items-center justify-center"
-  >
-    <div class="mb-14 flex flex-col items-center justify-center">
-      <h1 class="text-accent text-9xl font-bold">404</h1>
-      <span aria-hidden="true"> ¯\_(ツ)_/¯ </span>
-      <p class="mt-4 text-2xl sm:text-3xl">{t.notFound.message}</p>
-      <LinkButton
-        href={getRelativeLocaleUrl(locale, "")}
-        class="my-6 text-lg underline decoration-dashed underline-offset-8"
-      >
-        {t.notFound.goHome}
-      </LinkButton>
-    </div>
-  </main>
-
-  <Footer />
-</Layout>
+<Base title="404 — Page Not Found" noindex>
+  <div class="page-container py-16 text-center" style="min-height: calc(100vh - 57px - 4rem);">
+    <h1
+      class="mb-4 text-8xl font-bold"
+      style="color: var(--global-theme-color); font-family: var(--font-condensed);"
+    >
+      404
+    </h1>
+    <p class="mb-2 text-xl" style="color: var(--global-text-color);">Page not found</p>
+    <p class="mb-8 text-sm" style="color: var(--global-text-color-light);">
+      The page you were looking for doesn't exist or has been moved.
+    </p>
+    <a
+      href={`${site.base}/`}
+      style="color: var(--global-theme-color); text-decoration: none; font-weight: 500;"
+    >
+      &larr; Go back home
+    </a>
+  </div>
+</Base>

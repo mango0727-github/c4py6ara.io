@@ -1,0 +1,14 @@
+---
+title: "IMS Architecture when SIP signalling"
+description: "This is a handwritten description for IMS architecture when SIP signalling"
+date: 2025-10-04
+categories: [5g-security]
+---
+
+## IP Multimedia Subsystem
+
+For voice service, 5G provides IP Multimedia Subsystem (IMS) to specifically deliver speech packets. Before UEs communicate their speech packets, they should register first and a serving-CSCF has to be allocated to the UEs by UDM or Interrogate-CSCF. The following figure illustrates the architecture of the IMS when a UE first attempts SIP signalling.
+
+![Figure 1. IMS architecture for SIP signalling](./assets/IMS_UE_init.png)
+
+> SIP (Session Initiation Protocol) is somehow self-explanatory. It is used for signalling between UEs and the IMS when you firstly register UEs and invite your callee, in which QoS Flow within a PDU session is used for delivering the signalling messages from UEs to the UPF and N6 interface is used between the UPF and the IMS.

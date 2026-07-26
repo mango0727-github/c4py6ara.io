@@ -1,144 +1,236 @@
 ---
-import { getCollection } from "astro:content";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
-import Card from "@/components/Card.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
-import { useTranslations } from "@/i18n";
-import config from "@/config";
+import ProfilePhoto from '@components/about/ProfilePhoto.astro';
+import SocialLinks from '@components/SocialLinks.astro';
+import { site } from '@config/site';
+import Base from '@layouts/Base.astro';
+import { getAuthors, getBoolField, getTitle, getVenue, getYear, parseBibtex } from '@utils/bibtex';
+import { getCollection, render } from 'astro:content';
 
-const { socials, posts: postsConfig } = config;
+import AboutContent from '../data/about.mdx';
+import bibRaw from '../data/papers.bib?raw';
 
-const locale = Astro.currentLocale ?? config.site.lang;
-const t = useTranslations(locale);
+// Announcements
+const allAnnouncements = site.announcements.enabled
+  ? (await getCollection('announcements'))
+      .filter((e) => !e.data.hidden)
+      .sort((a, b) => {
+        if (a.data.pinned !== b.data.pinned) return a.data.pinned ? -1 : 1;
+        return b.data.date.getTime() - a.data.date.getTime();
+      })
+      .slice(0, site.announcements.limit)
+  : [];
 
-const posts = await getCollection("posts");
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
-const homePath = getRelativeLocaleUrl(locale, "");
+// Latest posts
+const allPosts = site.latestPosts.enabled
+  ? (await getCollection('posts'))
+      .filter((p) => !p.data.hidden)
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+      .slice(0, site.latestPosts.limit)
+  : [];
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+// Selected publications
+const selectedPapers = site.selectedPapers.enabled
+  ? parseBibtex(bibRaw).filter((e) => getBoolField(e, 'selected'))
+  : [];
+
+// Pre-render announcement content
+const renderedAnnouncements = await Promise.all(
+  allAnnouncements.map(async (item) => ({ item, rendered: await render(item) })),
+);
 ---
 
-<Layout>
-  <Header />
-  <main
-    id="main-content"
-    data-layout="index"
-    data-home-path={homePath}
-    class="app-layout"
-  >
-    <section id="hero" class="border-border border-b pt-8 pb-6">
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Hi, I'm Joon 👋
-      </h1>
-      <a
-        target="_blank"
-        href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
-        class="inline-block"
-        aria-label="RSS Feed"
-        title="RSS Feed"
+<Base isHome={true}>
+  <div class="post page-container py-8">
+    <header class="post-header">
+      <h1
+        class="post-title"
+        style="font-family: var(--font-sans); color: var(--global-text-color);"
       >
-        <IconRss
-          width={20}
-          height={20}
-          class="stroke-accent scale-125 stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
-
-      <p class="border-accent/60 bg-accent/5 my-4 rounded-lg border px-4 py-2.5 text-sm">
-        <a href={getRelativeLocaleUrl(locale, "about")} class="hover:text-accent">
-          <span class="text-accent me-2 font-bold tracking-widest">NEWS</span>
-          🎉 MissFlow 논문이 EIML@ICML 2026 워크숍에 억셉되었습니다!
-        </a>
-      </p>
-      <p>
-        Welcome to my personal space, where I put random things that fascinate
-        me. They are mainly about information security, wireless tech, and horse
-        riding. Also, I am so excited to see what topics will capture my
-        interest along the way!
-      </p>
-      <p class="mt-2">
-        Read the blog posts or check the{" "}
-        <LinkButton
-          class="hover:text-accent underline decoration-dashed underline-offset-4"
-          href={getRelativeLocaleUrl(locale, "about")}
-        >
-          About (CV)
-        </LinkButton>{" "}
-        page for more about me.
-      </p>
+        {(site.title as string) === 'blank' ? site.author.name : site.title}
+      </h1>
       {
-        socials.length > 0 && (
-          <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
-              {t.home.socialLinks}:
+        site.author.subtitle && (
+          <p
+            class="desc"
+            style="color: var(--global-text-color-light);"
+            set:html={site.author.subtitle}
+          />
+        )
+      }
+    </header>
+
+    <article>
+      <!-- Profile photo (floats right by default) -->
+      <ProfilePhoto align="right" />
+
+      <div class="clearfix">
+        <!-- Bio content from about.mdx -->
+        <div class="prose max-w-none">
+          <AboutContent />
+        </div>
+      </div>
+
+      <!-- Social icons -->
+      {
+        site.socials && (
+          <div class="social mt-6">
+            <div class="contact-icons">
+              <SocialLinks />
             </div>
-            <Socials />
           </div>
         )
       }
-    </section>
 
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-border border-b": recentPosts.length > 0 },
-          ]}
-        >
-          <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.featured}
-          </h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
+      <!-- Announcements / News -->
+      {
+        site.announcements.enabled && allAnnouncements.length > 0 && (
+          <section class="mt-8">
+            <h2 style="color: var(--global-text-color); border-bottom: 1px solid var(--global-divider-color); padding-bottom: 0.3rem;">
+              <a href={`${site.base}/news/`} style="color: inherit; text-decoration: none;">
+                news
+              </a>
+            </h2>
+            <div class={site.announcements.scrollable ? 'scrollable-list' : ''}>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                  {renderedAnnouncements.map(({ item, rendered: { Content } }) => (
+                    <tr style="border-bottom: 1px solid var(--global-divider-color);">
+                      <td style="padding: 0.5rem 1rem 0.5rem 0; white-space: nowrap; vertical-align: top; color: var(--global-text-color-light); font-size: 0.8rem;">
+                        {formatDate(item.data.date)}
+                      </td>
+                      <td style="padding: 0.5rem 0; font-size: 0.9rem; color: var(--global-text-color);">
+                        <Content />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )
+      }
 
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.recentPosts}
-          </h2>
-          <ul>
-            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
+      <!-- Latest posts -->
+      {
+        site.latestPosts.enabled && allPosts.length > 0 && (
+          <section class="mt-8">
+            <h2 style="color: var(--global-text-color); border-bottom: 1px solid var(--global-divider-color); padding-bottom: 0.3rem;">
+              <a href={`${site.base}/blog/`} style="color: inherit; text-decoration: none;">
+                latest posts
+              </a>
+            </h2>
+            <div class={site.latestPosts.scrollable ? 'scrollable-list' : ''}>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                  {allPosts.map((post) => (
+                    <tr style="border-bottom: 1px solid var(--global-divider-color);">
+                      <td style="padding: 0.5rem 1rem 0.5rem 0; white-space: nowrap; vertical-align: top; color: var(--global-text-color-light); font-size: 0.8rem;">
+                        {formatDate(post.data.date)}
+                      </td>
+                      <td style="padding: 0.5rem 0; font-size: 0.9rem;">
+                        <a
+                          href={`${site.base}/blog/${post.id}/`}
+                          style="color: var(--global-theme-color); text-decoration: none;"
+                        >
+                          {post.data.title}
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )
+      }
 
-    <div class="my-8 text-center">
-      <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
-        {t.home.allPosts}
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
-  </main>
-  <Footer />
-</Layout>
+      <!-- Selected publications -->
+      {
+        site.selectedPapers.enabled && selectedPapers.length > 0 && (
+          <section class="mt-8">
+            <h2 style="color: var(--global-text-color); border-bottom: 1px solid var(--global-divider-color); padding-bottom: 0.3rem;">
+              <a href={`${site.base}/publications/`} style="color: inherit; text-decoration: none;">
+                selected publications
+              </a>
+            </h2>
+            <ol class="m-0 list-none p-0">
+              {selectedPapers.map((entry) => {
+                const title = getTitle(entry);
+                const authors = getAuthors(entry);
+                const venue = getVenue(entry);
+                const year = getYear(entry);
+                const abbr = entry.fields.abbr;
+                const url =
+                  entry.fields.html ??
+                  (entry.fields.doi ? `https://doi.org/${entry.fields.doi}` : '');
+                const award = entry.fields.award;
+                return (
+                  <li class="mb-4 text-sm" style="line-height: 1.6;">
+                    {abbr && <span class="badge-abbr mr-2">{abbr}</span>}
+                    {url ? (
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style="color: var(--global-text-color); font-weight: 600; text-decoration: none;"
+                      >
+                        {title}
+                      </a>
+                    ) : (
+                      <strong style="color: var(--global-text-color);">{title}</strong>
+                    )}
+                    <br />
+                    <span style="color: var(--global-text-color-light);">{authors}</span>
+                    {(venue || year) && (
+                      <>
+                        {' · '}
+                        <em style="color: var(--global-text-color-light);">
+                          {venue}
+                          {venue && year ? ', ' : ''}
+                          {year || ''}
+                        </em>
+                      </>
+                    )}
+                    {award && (
+                      <span class="badge-abbr ml-2" style="background-color: #f59e0b;">
+                        {entry.fields.award_name ?? '🏆'}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+            <p class="mt-2 text-sm">
+              <a
+                href={`${site.base}/publications/`}
+                style="color: var(--global-theme-color); text-decoration: none;"
+              >
+                Full publication list &rarr;
+              </a>
+            </p>
+          </section>
+        )
+      }
+    </article>
+  </div>
+</Base>
 
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset;
-    const baseRoot = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-    if (indexLayout?.layout) {
-      sessionStorage.setItem("backUrl", indexLayout.homePath ?? baseRoot);
-    }
-  });
-</script>
+<style>
+  .clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  .post-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .desc {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+</style>

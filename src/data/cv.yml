@@ -1,0 +1,115 @@
+# RenderCV YAML format — https://docs.rendercv.com/
+# Used by the CV page when site.cv.format is 'rendercv'.
+
+cv:
+  name: Joonyoung Jeong
+  location: Seoul, Republic of Korea
+  email: 13-10113@kma.ac.kr
+  website: https://mango0727-github.github.io/c4py6ara.io/
+  summary: Cybersecurity researcher and active-duty officer. My research interests lie in cellular network security (5G RAN and 5GC) and computer systems security. I also enjoy dissecting binaries to uncover vulnerabilities and analyze malware functionality.
+  social_networks:
+    - network: GitHub
+      username: mango0727-github
+
+  sections:
+    education:
+      - institution: Iowa State University
+        area: Electrical and Computer Engineering
+        degree: M.S.
+        start_date: 2021-08
+        end_date: 2023-07
+        highlights:
+          - 'GPA: 3.95/4.0'
+          - 'Relevant coursework: Communication Systems, Advanced Communications, Network Protocol Security, Cryptography, Data Analytics in ECE, Digital Signal Processing, Introduction to Deep Learning'
+
+      - institution: Korea Military Academy
+        area: Mechanical Engineering
+        degree: B.E.
+        start_date: 2009-03
+        end_date: 2013-03
+
+    experience:
+      - company: Korea Military Academy
+        position: Planning Officer, AI R&D Center
+        location: Seoul, Republic of Korea
+        start_date: 2026-07
+        end_date: present
+        highlights:
+          - Research planning and coordination for AI-driven defense technology initiatives
+          - 'Sponsored research: Mobile Security Architecture for Defense 5G Infrastructure (funded by ROK Army Headquarters)'
+
+      - company: Korea Military Academy
+        position: Rotating Faculty
+        location: Seoul, Republic of Korea
+        start_date: 2025-07
+        end_date: present
+        highlights:
+          - Teaching and advising cadets; participating in defense projects
+          - 'Courses taught: Introduction to Statistics (Fall 2025, Spring 2026), Introduction to Data Mining (Fall 2025), Linear Algebra (Spring 2026)'
+
+      - company: Ministry of National Defense
+        position: Signals Intelligence Officer
+        location: Republic of Korea
+        start_date: 2023-08
+        end_date: 2025-05
+        highlights:
+          - Malware analysis and cyber threat intelligence
+
+      - company: Iowa State University
+        position: Research Assistant / Teaching Assistant
+        location: Ames, IA, USA
+        start_date: 2022-08
+        end_date: 2023-07
+        highlights:
+          - Summarized 5G-related papers and 5GC/RAN architectures into advisor briefs
+          - 'Teaching assistant: Communication Systems I & II Labs'
+
+      - company: Ministry of National Defense
+        position: Signals Intelligence Officer
+        location: Republic of Korea
+        start_date: 2018-08
+        end_date: 2021-07
+        highlights:
+          - Communications intelligence (COMINT)
+
+      - company: Army Headquarters
+        position: Military Intelligence Officer
+        location: Republic of Korea
+        start_date: 2013-03
+        end_date: 2018-08
+        highlights:
+          - General military intelligence
+
+    publications:
+      - title: 'MissFlow: Flow Matching for Uncertainty-Quantified Imputation of Missing Tabular Data'
+        authors:
+          - S. Hwang
+          - Joonyoung Jeong
+          - Y. Kwon
+        date: 2026
+        journal: EIML Workshop @ ICML 2026 (accepted; revisions in progress)
+
+      - title: 'Covert Authentication for Securing MIMO Communications'
+        authors:
+          - Joonyoung Jeong
+        date: 2023
+        journal: M.S. thesis, Iowa State University
+
+    awards:
+      - name: Chairman of the Joint Chiefs of Staff Commendation
+        date: '2024'
+        issuer: Joint Chiefs of Staff, Republic of Korea
+
+      - name: Letter of Appreciation (SES-2)
+        date: '2024'
+        issuer: Foreign Agency
+
+      - name: Army Merit Scholarship (full tuition and stipend)
+        date: '2021 – 2023'
+        issuer: Ministry of National Defense
+
+    skills:
+      - label: Programming Languages
+        details: Python, C/C++, x86-64 Assembly, MATLAB, Simulink, R
+      - label: Analysis Tools
+        details: Burp Suite, Ghidra, IDA Pro, x64dbg, GDB, Wireshark, AFL++

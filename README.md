@@ -1,35 +1,54 @@
-# Joon InfoSec Playground
+# Joonyoung Jeong — academic homepage & blog
 
-Personal blog of Joonyoung Jeong — information security, wireless tech, and horse riding.
+Personal academic site of Joonyoung Jeong: about/news, publications, CV, and the
+"Joon InfoSec Playground" blog (information security, wireless tech, and horse riding).
 
 Live at <https://mango0727-github.github.io/c4py6ara.io/>.
 
-Built with [Astro](https://astro.build) and the [AstroPaper](https://github.com/satnaing/astro-paper) theme (migrated from Jekyll/Hydejack in July 2026). Deployed to GitHub Pages via GitHub Actions on every push to `main`.
+Built with [Astro](https://astro.build) and the [as-folio](https://github.com/dadangnh/as-folio)
+academic theme (an al-folio–style portfolio). Deployed to GitHub Pages via GitHub Actions
+on every push to `main`.
 
-## Writing a post
+## Editing content
 
-Add a Markdown file under `src/content/posts/<category>/<slug>.md`:
+| What | Where |
+| --- | --- |
+| Site settings, navbar, socials | `src/config/site.ts` |
+| About page bio | `src/data/about.mdx` |
+| News/announcements | `src/content/announcements/*.md` |
+| Publications | `src/data/papers.bib` (al-folio BibTeX conventions) |
+| CV page | `src/data/cv.yml` (RenderCV format) + PDF in `public/assets/pdf/` |
+| Blog posts | `src/content/posts/<slug>.md` |
+| Profile photo | `public/assets/img/prof_pic.jpg` |
+
+### Writing a post
 
 ```yaml
 ---
 title: "Post title"
 description: "One-or-two sentence summary."
-pubDatetime: 2026-07-26T12:00:00+09:00
-tags:
-  - "5G security"
+date: 2026-07-26
+categories: [5g-security]
+math: true # only if the post uses LaTeX math
 ---
 ```
 
-Put images next to the post (e.g. `src/content/posts/<category>/assets/...`) and reference them relatively: `![caption](./assets/figure.png)`. LaTeX math (`$...$`, `$$...$$`) is rendered with KaTeX.
+Put images under `src/content/posts/assets/` and reference them relatively,
+e.g. `![caption](./assets/my-post/figure.png)`.
 
 ## Development
 
-Requires Node 22+.
+Requires Node 24+ and corepack (yarn 4).
 
 ```bash
-npm install
-npm run dev      # local dev server
-npm run build    # production build into dist/
+corepack enable
+yarn install
+ASTRO_SITE=https://mango0727-github.github.io ASTRO_BASE=/c4py6ara.io yarn dev
+yarn build   # production build into dist/
 ```
 
-Old Jekyll URLs (`/<category>/<YYYY-MM-DD-name>/`) redirect to the new `/posts/...` structure — see `redirects.ts`. The last Jekyll version of the site is preserved on the `jekyll-backup` branch.
+## History
+
+- Jekyll (Hydejack) era: preserved on the `jekyll-backup` branch.
+- Old URLs (`/<category>/<YYYY-MM-DD-name>/` and the interim `/posts/...` scheme)
+  redirect to `/blog/<slug>/` — see the redirects block in `astro.config.mjs`.
