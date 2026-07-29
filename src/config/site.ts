@@ -57,7 +57,7 @@ export const site = {
      * Subtitle below your name on the about page.
      * HTML is supported.
      */
-    subtitle: `Ph.D. student &nbsp;·&nbsp; Cybersecurity researcher
+    subtitle: `Cybersecurity researcher
       &nbsp;·&nbsp;
       <a href="https://www.kma.ac.kr">Korea Military Academy</a>`,
 
