@@ -207,7 +207,7 @@ export const site = {
     /** Enable vertical scroll if more than 3 items. */
     scrollable: true,
     /** Max news items to show (undefined = show all). */
-    limit: 5 as number | undefined,
+    limit: undefined as number | undefined,
   },
 
   latestPosts: {
