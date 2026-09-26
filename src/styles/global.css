@@ -424,7 +424,7 @@
   }
   @media (min-width: 576px) {
     .profile {
-      width: 30%;
+      width: 25%;
     }
     .profile .more-info p {
       display: block;
