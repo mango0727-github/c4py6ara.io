@@ -402,6 +402,10 @@
   .profile {
     width: 100%;
   }
+  .profile img {
+    width: 100%;
+    height: auto;
+  }
   .profile .more-info {
     margin-bottom: 5px;
     margin-top: 5px;
